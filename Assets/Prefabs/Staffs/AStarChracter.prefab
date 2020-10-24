@@ -178,8 +178,8 @@ GameObject:
   - component: {fileID: -8526731268043958189}
   - component: {fileID: 7014435925993290920}
   m_Layer: 0
-  m_Name: AStarChracter1
-  m_TagString: Untagged
+  m_Name: AStarChracter
+  m_TagString: Staff
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -253,7 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf17f37e275a4ac469c4a6031a8d4803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 5
+  movementSpeed: 5
+  closeEnough: 0.001
 --- !u!114 &7014435925993290920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,8 +267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2833c56c47f185478ae2b99fde0cab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hoveredBox: {fileID: 65871965721790370}
-  _selectedBox: {fileID: 5709643948625194895}
+  hoveredBox: {fileID: 65871965721790370}
+  selectedBox: {fileID: 5709643948625194895}
 --- !u!1 &5709643948625194895
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ TagManager:
   - WalkableTile
   - Cursor
   - GridPathfinding
+  - Furniture
   layers:
   - Default
   - TransparentFX

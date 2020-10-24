@@ -4,78 +4,120 @@ using UnityEngine;
 
 public class SelectionManager : MonoBehaviour
 {
-    private GameObject _hoveredObject;
-    private GameObject _selectedObject;
-    private MouseInput _mouseInput;
+    public static bool enableSelection;
+    public static GameObject hoveredObject { get; private set; }
+    public static GameObject selectedObject { get; private set; }
+
+    private MouseInput mouseInput;
+    public ContextMenu contextMenu;
 
     private void Awake() {
-        _mouseInput = new MouseInput();
+        mouseInput = new MouseInput();
     }
 
     private void OnEnable() {
-        _mouseInput.Enable();
+        mouseInput.Enable();
     }
 
     private void OnDisable() {
-        _mouseInput.Disable();
+        mouseInput.Disable();
     }
 
-    private void Start() 
-	{
-        _mouseInput.Mouse.MouseRightClick.performed += _ => MouseRightClick();
+    private void Start() {
+        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
+        mouseInput.Mouse.MouseRightClick.performed += _ => MouseRightClick();
     }
 
-    private void Update() 
-	{
+    private void Update() {
+        TrackSelection();
+    }
+
+    private void TrackSelection() {
+        if (!enableSelection) return;
+
         // Raycast from camera to mouse position
-        Vector2 raycastPos = GridCursor._mousePositionWorld;
+        Vector2 raycastPos = GridCursor.mousePositionWorld;
         RaycastHit2D hit = Physics2D.Raycast(raycastPos, Vector2.zero);
-       
+
         if (hit.collider != null) {
-            // if hit is a selecteable
+            // if hit is a Selecteable
             if (hit.collider.gameObject.GetComponent<ISelectable>() != null) {
 
                 //if hit is not the same as recently hovered
-                if (_hoveredObject != hit.collider.gameObject) {
+                if (hoveredObject != hit.collider.gameObject) {
                     Debug.Log(hit.collider.gameObject.name);
-                    _hoveredObject = hit.transform.gameObject;
-                    _hoveredObject.GetComponent<ISelectable>().Hovered();
+                    hoveredObject = hit.transform.gameObject;
+                    hoveredObject.GetComponent<ISelectable>().Hovered();
                 }
             }
-        } else {
-            if (_hoveredObject != null) {
-                _hoveredObject.GetComponent<ISelectable>().Unhovered();
+        }
+        else {
+            if (hoveredObject != null) {
+                hoveredObject.GetComponent<ISelectable>().Unhovered();
             }
-            _hoveredObject = null;
+            hoveredObject = null;
         }
     }
 
-    private void MouseRightClick() {
-        // Without a hovered object with a selected object - Deselect
-        if (_hoveredObject == null && _selectedObject != null) {
-            _selectedObject.GetComponent<ISelectable>().Unselected();
-            _selectedObject = null;
+    private void MouseLeftClick() {
+        // Do nothing without hovered object
+        if (hoveredObject == null) return;
+
+        // Deselect hovered selected object
+        if (selectedObject != null && selectedObject == hoveredObject) {
+            selectedObject.GetComponent<ISelectable>().Unselected();
+            selectedObject = null;
             return;
         }
 
-        // No hovered - do Nothing
-        if (_hoveredObject == null) return;
-
-        // Hovering selected object
-        if (_selectedObject != null && _selectedObject == _hoveredObject) {
-            _selectedObject.GetComponent<ISelectable>().Unselected();
-            _selectedObject = null;
-            return;
-        }
-
-        // Selecting a new different object
-        if (_selectedObject != null && _selectedObject != _hoveredObject) {
-            _selectedObject.GetComponent<ISelectable>().Unselected();
+        // Select a new different object 
+        if (selectedObject != null && selectedObject != hoveredObject) {
+            selectedObject.GetComponent<ISelectable>().Unselected();
         } 
 
         // Hovered becomes selected
-        _selectedObject = _hoveredObject;
-        _selectedObject.GetComponent<ISelectable>().Selected();
+        selectedObject = hoveredObject;
+        selectedObject.GetComponent<ISelectable>().Selected();
+    }
 
+    private void MouseRightClick() {
+        // false track selection means context menu is open
+        if (enableSelection) {
+            // Hovering a selectable object
+            if (hoveredObject != null) {
+                hoveredObject.GetComponent<ISelectable>().OnContextMenu(contextMenu);
+                return;
+            }
+
+            // With selected object and 
+            if (selectedObject != null) {
+                selectedObject.GetComponent<ISelectable>().OnContextMenu(contextMenu);
+                return;
+            }
+        }
+
+        // Deselect object when not hovering a selectable object
+        if (hoveredObject == null && selectedObject != null) {
+            selectedObject.GetComponent<ISelectable>().Unselected();
+            selectedObject = null;
+            return;
+        }
+
+        // Context Menu is Open
+        if (contextMenu.enabled) {
+            contextMenu.DisableContextMenu();
+            return;
+        }
+    }
+
+    public void SetHoveredAsSelected() {
+        selectedObject = hoveredObject;
+        selectedObject.GetComponent<ISelectable>().Selected();
+    }
+
+    public void MoveSelectedObject() {
+        if (selectedObject.tag == "Staff") {
+            selectedObject.GetComponent<Staff>().MoveToGrid();
+        }
     }
 }

@@ -11,7 +11,7 @@ public class Pathfinding2D : MonoBehaviour
     Node2D seekerNode, targetNode;
     public GameObject GridOwner;
 
-    public List<Node2D> m_Path;
+    public List<Node2D> myPath;
 
     void Start()
     {
@@ -93,7 +93,7 @@ public class Pathfinding2D : MonoBehaviour
         path.Reverse();
 
         //grid.path = path;
-        m_Path = path;
+        myPath = path;
     }
 
 

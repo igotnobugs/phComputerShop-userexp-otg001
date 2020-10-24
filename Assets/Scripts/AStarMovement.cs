@@ -7,19 +7,19 @@ using UnityEngine.Tilemaps;
 
 public class AStarMovement : MonoBehaviour 
 {
-    public float _movementSpeed = 5.0f;
-    public float _closeEnough = 0.001f;
+    public float movementSpeed = 5.0f;
+    public float closeEnough = 0.001f;
 
-    private Tilemap _walkableMap;
-    private Vector3 _destination;
-    private Pathfinding2D _pathfinding;
+    private Tilemap walkableTilemap;
+    private Vector3 destination;
+    private Pathfinding2D pathfinding;
 
     private int currentWaypointIndex = 0;
 
     private void Start() {
-        _walkableMap = GameObject.FindGameObjectWithTag("WalkableTile").GetComponent<Tilemap>();
-        _destination = transform.position;
-        _pathfinding = GetComponent<Pathfinding2D>();
+        walkableTilemap = GameObject.FindGameObjectWithTag("WalkableTile").GetComponent<Tilemap>();
+        destination = transform.position;
+        pathfinding = GetComponent<Pathfinding2D>();
     }
 
 
@@ -29,35 +29,33 @@ public class AStarMovement : MonoBehaviour
 
     private void FixedUpdate() {
 
-        if (_pathfinding.m_Path == null) return;
+        if (pathfinding.myPath == null) return;
 
-        if (currentWaypointIndex >= _pathfinding.m_Path.Count) {
+        if (currentWaypointIndex >= pathfinding.myPath.Count) {
             return;
         }
      
-        Vector3 currentNode = _pathfinding.m_Path[currentWaypointIndex].worldPosition;   
-        if (Vector3.Distance(transform.position, currentNode) > _closeEnough) {
+        Vector3 currentNode = pathfinding.myPath[currentWaypointIndex].worldPosition;   
+        if (Vector3.Distance(transform.position, currentNode) > closeEnough) {
             // Move towards node
             transform.position = Vector3.MoveTowards(transform.position,
                                                      currentNode,
-                                                     _movementSpeed * Time.deltaTime);
+                                                     movementSpeed * Time.deltaTime);
         } else {
             // Move to the next point if close enough
             // Set position
-            transform.position = _pathfinding.m_Path[currentWaypointIndex].worldPosition;
+            transform.position = pathfinding.myPath[currentWaypointIndex].worldPosition;
             // Increase index
             currentWaypointIndex++;
         }
     }
 
-    public bool AttemptFindPath() {
-        Vector3Int gridPosition = GridCursor._gridPosition;
-
+    public bool AttemptFindPath(Vector3Int gridPosition) {
         // Check if tile is walkable
-        if (_walkableMap.HasTile(gridPosition)) {
+        if (walkableTilemap.HasTile(gridPosition)) {
             currentWaypointIndex = 0;
-            _destination = GridCursor._gridPositionOffset;
-            _pathfinding.FindPath(transform.position, GridCursor._gridPositionOffset);
+            destination = GridCursor.gridPositionOffset;
+            pathfinding.FindPath(transform.position, GridCursor.gridPositionOffset);
             return true;
         }
 
