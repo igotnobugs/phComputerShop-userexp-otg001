@@ -13,7 +13,7 @@ public class ActiveWhenTrue : MonoBehaviour
 
     private void OnEnable() {
         if (withHoveredObject) {
-            if (SelectionManager.hoveredObject != null) {
+            if (SelectionManager.HoveredObject != null) {
                 gameObject.SetActive(true);
             }
             else {
@@ -22,7 +22,7 @@ public class ActiveWhenTrue : MonoBehaviour
         }
 
         if (withSelectedObject) {
-            if (SelectionManager.selectedObject != null) {
+            if (SelectionManager.SelectedObject != null) {
                 gameObject.SetActive(true);
             }
             else {

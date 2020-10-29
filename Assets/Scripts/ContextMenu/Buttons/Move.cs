@@ -2,25 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Only show when having a selected staff
+// Only show when having a moveable selected object
 
-public class Move : MonoBehaviour 
+public class Move : MonoBehaviour, IContextButton
 {
+    private ContextMenuManager contextManager;
 
-    private void Start() {
-        
+    private void Awake() {
+        contextManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ContextMenuManager>();
     }
 
-
-    private void OnEnable() {
-        if (SelectionManager.selectedObject != null) {
-            if (SelectionManager.selectedObject.tag == "Staff") {
+    public void Enable() {
+        if (SelectionManager.SelectedObject != null && 
+            SelectionManager.HoveredObject == null) {
+            if (SelectionManager.SelectedObject.tag == "Staff") {
                 gameObject.SetActive(true);
                 return;
-            }        
+            }
         }
-
         gameObject.SetActive(false);
-        
+    }
+
+    public void OnClick() {
+        SelectionManager.SelectedObject.GetComponent<Staff>().MoveToGrid();
+        contextManager.DisableContextMenu();
+    }
+
+    private void OnDisable() {
+
     }
 }

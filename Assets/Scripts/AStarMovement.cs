@@ -16,19 +16,16 @@ public class AStarMovement : MonoBehaviour
 
     private int currentWaypointIndex = 0;
 
-    private void Start() {
+    private void Awake() {
         walkableTilemap = GameObject.FindGameObjectWithTag("WalkableTile").GetComponent<Tilemap>();
-        destination = transform.position;
         pathfinding = GetComponent<Pathfinding2D>();
     }
 
-
-    private void Update() {
-
+    private void Start() {       
+        destination = transform.position;       
     }
 
     private void FixedUpdate() {
-
         if (pathfinding.myPath == null) return;
 
         if (currentWaypointIndex >= pathfinding.myPath.Count) {
@@ -54,11 +51,12 @@ public class AStarMovement : MonoBehaviour
         // Check if tile is walkable
         if (walkableTilemap.HasTile(gridPosition)) {
             currentWaypointIndex = 0;
-            destination = GridCursor.gridPositionOffset;
-            pathfinding.FindPath(transform.position, GridCursor.gridPositionOffset);
+            destination = GridCursor.GridPositionOffset;
+            pathfinding.FindPath(transform.position, destination);
+            Debug.Log("Path found");
             return true;
         }
-
+        Debug.Log("Path not found");
         return false;
     }
 }

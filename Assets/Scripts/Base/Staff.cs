@@ -12,12 +12,9 @@ public class Staff : MonoBehaviour, ISelectable
 
     private void Awake() {
         mouseInput = new MouseInput();
+        movementControl = GetComponent<AStarMovement>();
         hoveredBox.SetActive(false);
         selectedBox.SetActive(false);
-    }
-
-    private void OnEnable() {
-        mouseInput.Enable();
     }
 
     private void OnDisable() {
@@ -25,12 +22,9 @@ public class Staff : MonoBehaviour, ISelectable
     }
 
     private void Start() 
-	{
-        movementControl = GetComponent<AStarMovement>();
-        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
-
-        // Disable input at start
-        mouseInput.Disable();
+	{     
+        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();      
+        mouseInput.Disable(); // Disable input at start
     }
 
 
@@ -41,14 +35,14 @@ public class Staff : MonoBehaviour, ISelectable
 
     private void MouseLeftClick() {
         // Do nothing with context menu open
-        if (ContextMenu.contextMenuOpen) return;
+        if (ContextMenuManager.ContextMenuOpen) return;
 
         // Do left click actions
-        MoveToGrid(GridCursor.gridPosition);
+        MoveToGrid(GridCursor.GridPosition);
     }
 
     public void MoveToGrid() {
-        movementControl.AttemptFindPath(GridCursor.gridPosition);
+        movementControl.AttemptFindPath(GridCursor.GridPosition);
     }
 
     public void MoveToGrid(Vector3Int gridPosition) {
@@ -74,7 +68,7 @@ public class Staff : MonoBehaviour, ISelectable
     }
 
     public void OnContextMenu(ContextMenu menu) {
-        menu.MoveTo(GridCursor.gridPositionWorld);
+        menu.MoveTo(GridCursor.GridPositionWorld);
     }
 
     public void OnDestroy() {

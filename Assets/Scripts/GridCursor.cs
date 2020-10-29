@@ -8,20 +8,22 @@ public class GridCursor : Singleton<GridCursor>
     public Vector3 offSet = new Vector3( 0.5f, 0.5f, 0);
 
     //Tiles where gridcursor can go to
-    public Tilemap selectableTileMap;
+    public static Tilemap selectableTileMap;
 
     public static bool trackCursor = true;
-    public static Vector2 mousePositionScreen { get; private set; }
-    public static Vector2 mousePositionWorld { get; private set; }
-    public static Vector3Int gridPosition { get; private set; }
-    public static Vector3 gridPositionWorld { get; private set; }
-    public static Vector3 gridPositionOffset { get; private set; }
+    public static Vector2 MousePositionScreen { get; private set; }
+    public static Vector2 MousePositionWorld { get; private set; }
+    public static Vector3Int GridPosition { get; private set; }
+    public static Vector3 GridPositionWorld { get; private set; }
+    public static Vector3 GridPositionOffset { get; private set; }
     
     private MouseInput mouseInput;
     private Camera mainCamera;
    
     private void Awake() {
         mouseInput = new MouseInput();
+        selectableTileMap = GameObject.FindGameObjectWithTag("SelectableTile").GetComponent<Tilemap>();
+        mainCamera = Camera.main;
     }
 
     private void OnEnable() {
@@ -32,25 +34,29 @@ public class GridCursor : Singleton<GridCursor>
         mouseInput.Disable();
     }
 
-    private void Start() {
-        mainCamera = Camera.main;
+    private void Update() {
+        TrackCursor();
     }
 
-    private void Update() {
+    private void TrackCursor() {
         if (!trackCursor) return;
 
         //Various mouse position coordinates
-        mousePositionScreen = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
+        MousePositionScreen = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
 
-        mousePositionWorld = mainCamera.ScreenToWorldPoint(mousePositionScreen);
+        MousePositionWorld = mainCamera.ScreenToWorldPoint(MousePositionScreen);
 
-        gridPosition = selectableTileMap.WorldToCell(mousePositionWorld);
-     
-        if (selectableTileMap.HasTile(gridPosition)) {
-            gridPositionOffset = gridPosition + offSet;
+        GridPosition = selectableTileMap.WorldToCell(MousePositionWorld);
+
+        if (selectableTileMap.HasTile(GridPosition)) {
+            GridPositionOffset = GridPosition + offSet;
         }
-     
-        transform.position = gridPositionOffset;
-        gridPositionWorld = transform.position;
+
+        transform.position = GridPositionOffset;
+        GridPositionWorld = transform.position;
+    }
+
+    public static Vector3Int WorldToGrid(Vector3 worldPosition) {
+        return selectableTileMap.WorldToCell(worldPosition);
     }
 }

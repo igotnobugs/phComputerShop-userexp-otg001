@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LightSwitch : Furniture, ISelectable 
 {
+    // The hovered furniture
+    private GameObject contextObject;
+
     private void Start() {
 
     }

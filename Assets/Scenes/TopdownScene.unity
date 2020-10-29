@@ -523,9 +523,10 @@ GameObject:
   m_Component:
   - component: {fileID: 473599088}
   - component: {fileID: 473599087}
+  - component: {fileID: 473599089}
   m_Layer: 0
   m_Name: Managers
-  m_TagString: Untagged
+  m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -542,7 +543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d69b8197f718e343a05d32361b49b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contextMenu: {fileID: 1031107328}
 --- !u!4 &473599088
 Transform:
   m_ObjectHideFlags: 0
@@ -557,6 +557,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &473599089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473599086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3a1590d77f49b48a917f7ff8936207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contextMenu: {fileID: 1031107328}
 --- !u!1 &604205569
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,7 +619,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 604205569}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad9ac6da7f749a3469b339fb2243debd, type: 3}
+  m_Script: {fileID: 11500000, guid: c79dd4d6efd563548beafeddc86410f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &604205572
@@ -652,21 +665,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473599087}
-        m_TargetAssemblyTypeName: SelectionManager, Assembly-CSharp
-        m_MethodName: MoveSelectedObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1031107328}
-        m_TargetAssemblyTypeName: ContextMenu, Assembly-CSharp
-        m_MethodName: DisableContextMenu
+      - m_Target: {fileID: 604205571}
+        m_TargetAssemblyTypeName: Interact, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -876,21 +877,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473599087}
-        m_TargetAssemblyTypeName: SelectionManager, Assembly-CSharp
-        m_MethodName: MoveSelectedObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1031107328}
-        m_TargetAssemblyTypeName: ContextMenu, Assembly-CSharp
-        m_MethodName: DisableContextMenu
+      - m_Target: {fileID: 756876462}
+        m_TargetAssemblyTypeName: Move, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2092,21 +2081,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473599087}
-        m_TargetAssemblyTypeName: SelectionManager, Assembly-CSharp
-        m_MethodName: SetHoveredAsSelected
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1031107328}
-        m_TargetAssemblyTypeName: ContextMenu, Assembly-CSharp
-        m_MethodName: DisableContextMenu
+      - m_Target: {fileID: 887437940}
+        m_TargetAssemblyTypeName: Select, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2975,7 +2952,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 908305403}
-  buttons: []
 --- !u!1001 &1050757596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9862,7 +9838,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862210473}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.5, y: -3.5, z: 0}
+  m_LocalPosition: {x: -8.5, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9881,7 +9857,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offSet: {x: 0.5, y: 0.5, z: 0}
-  selectableTileMap: {fileID: 1894209917}
 --- !u!1 &1894209914
 GameObject:
   m_ObjectHideFlags: 0
@@ -9895,7 +9870,7 @@ GameObject:
   - component: {fileID: 1894209916}
   m_Layer: 0
   m_Name: Floor - Tilemap
-  m_TagString: Untagged
+  m_TagString: SelectableTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11963,7 +11938,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Move
+  m_Text: Interact
 --- !u!222 &2046004110
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12038,19 +12013,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1224146608517888547, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 1224146608517888547, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3348445547860169774, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 3348445547860169774, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3348445547860169774, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12086,6 +12061,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3348445547860169774, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516231897389228105, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516231897389228105, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5273916908480844160, guid: 41da4a365b591d349852b1ed44ac7d34, type: 3}
