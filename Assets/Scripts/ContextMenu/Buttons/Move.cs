@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-// Only show when having a moveable selected object
+/* Same as clicking a staff and click anywhere to move
+ * 
+ */
 
 public class Move : MonoBehaviour, IContextButton
 {
     private ContextMenuManager contextManager;
 
     private void Awake() {
-        contextManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ContextMenuManager>();
+        GameObject go = GameObject.FindGameObjectWithTag("Manager");
+        contextManager = go.GetComponent<ContextMenuManager>();
     }
 
     public void Enable() {
@@ -24,11 +25,8 @@ public class Move : MonoBehaviour, IContextButton
     }
 
     public void OnClick() {
-        SelectionManager.SelectedObject.GetComponent<Staff>().MoveToGrid();
+        Staff staff = SelectionManager.SelectedObject.GetComponent<Staff>();
+        staff.MoveToGrid(ContextMenuManager.ContextMenuGridPosition);
         contextManager.DisableContextMenu();
-    }
-
-    private void OnDisable() {
-
     }
 }

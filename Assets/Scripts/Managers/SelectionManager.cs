@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectionManager : MonoBehaviour
+/* Left clicking
+ * Find selected and hovered
+ */ 
+
+public class SelectionManager : Singleton<SelectionManager>
 {
     public static bool enableSelection = true;
-    public static GameObject HoveredObject { get; private set; }
-    public static GameObject SelectedObject { get; private set; }
+    public static GameObject HoveredObject { get; private set; } = null;
+    public static GameObject SelectedObject { get; private set; } = null;
 
     private MouseInput mouseInput;
 
@@ -24,7 +28,6 @@ public class SelectionManager : MonoBehaviour
 
     private void Start() {
         mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
-        //mouseInput.Mouse.MouseRightClick.performed += _ => MouseRightClick();
     }
 
     private void Update() {
@@ -42,7 +45,7 @@ public class SelectionManager : MonoBehaviour
             if (hitSelectable != null) {
                 //if hit is not the same as recently hovered
                 if (HoveredObject != hitObject) {
-                    Debug.Log("Hovered: " + hitObject.name);
+                    //Debug.Log("Hovered: " + hitObject.name);
                     HoveredObject = hitObject;
                     hitSelectable.Hovered();
                 }
@@ -57,37 +60,36 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    // Select - selectable object
+
+    // Select a selectable hovered object
     private void MouseLeftClick() {
+        if (!enableSelection) return;
         // Do nothing without hovered object
         if (HoveredObject == null) return;
-        //if (ContextMenuManager.ContextMenuOpen) return;
 
         // Deselect hovered selected object
-        if (SelectedObject == null && SelectedObject == HoveredObject) {
+        if (SelectedObject == HoveredObject) {
             SelectedObject.GetComponent<ISelectable>().Unselected();
             SelectedObject = null;
             return;
         }
-
-        // Select a new different object 
-        //if (SelectedObject != null && SelectedObject != HoveredObject) {
-        //    SelectedObject.GetComponent<ISelectable>().Unselected();
-        //}
 
         // Hovered becomes selected
         SetObjectAsSelected(HoveredObject);
     }
 
     public static void SetObjectAsSelected(GameObject go) {
+        
         if (SelectedObject != null && SelectedObject != HoveredObject) {
             SelectedObject.GetComponent<ISelectable>().Unselected();
+            SelectedObject = null;
         }
 
         ISelectable selectableObject = go.GetComponent<ISelectable>();
         if (selectableObject != null) {            
             SelectedObject = go;
             selectableObject.Selected();
-        }     
+        }
+        Debug.Log(SelectedObject);
     }
 }

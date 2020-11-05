@@ -2,27 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContextMenu : MonoBehaviour 
+/* Displays the context menu 
+ * Called by the ContextMenuManager
+ * 
+ */
+
+public class ContextMenu : Singleton<ContextMenu> 
 {   
     public RectTransform canvas;
     private RectTransform rectTransform;
-
+    
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    private void OnEnable() {
+    private void OnEnable() {    
         foreach (Transform child in transform) {
             IContextButton button = child.gameObject.GetComponent<IContextButton>();
             if (button != null) {
                 button.Enable();
             }
-        }
-    }
-
-    private void OnDisable() {
-        //foreach (Transform child in transform)
-        //    child.gameObject.SetActive(false);
+        }      
     }
 
     private void Start() {

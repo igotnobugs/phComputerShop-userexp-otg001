@@ -2133,7 +2133,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 12
-      m_TileSpriteIndex: 12
+      m_TileSpriteIndex: 13
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2142,7 +2142,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 13
-      m_TileSpriteIndex: 13
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2918,9 +2918,9 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: -428880518619234904, guid: 7a2daff850096a744a64f65f6f55817b, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 4911638543981688741, guid: 7a2daff850096a744a64f65f6f55817b, type: 3}
-  - m_RefCount: 1
     m_Data: {fileID: 6900350705718959312, guid: 7a2daff850096a744a64f65f6f55817b, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 4911638543981688741, guid: 7a2daff850096a744a64f65f6f55817b, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -2491411379700189230, guid: 7a2daff850096a744a64f65f6f55817b, type: 3}
   - m_RefCount: 1
@@ -3467,7 +3467,7 @@ TilemapRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -3516,7 +3516,7 @@ GameObject:
   - component: {fileID: 858931719122297232}
   - component: {fileID: 11531171464511500}
   m_Layer: 31
-  m_Name: DefaultTopdown
+  m_Name: Interiors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3549,7 +3549,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &2671732603141101941
+--- !u!114 &6653136730956063863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

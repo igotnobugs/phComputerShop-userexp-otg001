@@ -23,7 +23,7 @@ public class Pathfinding2D : MonoBehaviour
     }
 
 
-    public void FindPath(Vector3 startPos, Vector3 targetPos)
+    public bool FindPath(Vector3 startPos, Vector3 targetPos)
     {
         //get player and target position in grid coords
         seekerNode = grid.NodeFromWorldPoint(startPos);
@@ -54,7 +54,7 @@ public class Pathfinding2D : MonoBehaviour
             if (node == targetNode)
             {
                 RetracePath(seekerNode, targetNode);
-                return;
+                return true;
             }
             
             //adds neighbor nodes to openSet
@@ -77,6 +77,8 @@ public class Pathfinding2D : MonoBehaviour
                 }
             }
         }
+        //Path not found
+        return false;
     }
 
     //reverses calculated path so first node is closest to seeker

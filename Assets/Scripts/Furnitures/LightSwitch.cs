@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Light Switch
+ * 
+ * WIP - Actually make it interact with the lights
+ */
+
 public class LightSwitch : Furniture, ISelectable 
 {
     // The hovered furniture
     private GameObject contextObject;
-
-    private void Start() {
-
-    }
-
-
-    private void Update() {
-
-    }
 
     public void Hovered() {
         //throw new System.NotImplementedException();

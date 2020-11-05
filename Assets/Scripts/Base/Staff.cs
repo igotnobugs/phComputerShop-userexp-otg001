@@ -1,81 +1,84 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Staff : MonoBehaviour, ISelectable 
+/* Handles selection and movement
+ * Contains the staffObject
+ */
+
+public class Staff : MonoBehaviour, ISelectable
 {
-    public GameObject hoveredBox;
-    public GameObject selectedBox;
+    public StaffObject attributes;
 
     private MouseInput mouseInput;
     private AStarMovement movementControl;
+    private Material mat;
+    private bool isSelected = false;
 
     private void Awake() {
         mouseInput = new MouseInput();
         movementControl = GetComponent<AStarMovement>();
-        hoveredBox.SetActive(false);
-        selectedBox.SetActive(false);
+        mat = GetComponentInChildren<SpriteRenderer>().material;
     }
 
     private void OnDisable() {
         mouseInput.Disable();
     }
 
-    private void Start() 
-	{     
+    private void Start() {     
         mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();      
-        mouseInput.Disable(); // Disable input at start
-    }
-
-
-    private void Update() 
-	{
-        
+        mouseInput.Disable();
     }
 
     private void MouseLeftClick() {
         // Do nothing with context menu open
         if (ContextMenuManager.ContextMenuOpen) return;
 
-        // Do left click actions
-        MoveToGrid(GridCursor.GridPosition);
+        // Do left click actions, mainly just moving
+        MoveToGrid(GridCursor.GridPositionOffset);
     }
 
-    public void MoveToGrid() {
-        movementControl.AttemptFindPath(GridCursor.GridPosition);
+    public void MoveToGrid(Vector3 destination) {
+        movementControl.AttemptFindPath(destination);
     }
-
-    public void MoveToGrid(Vector3Int gridPosition) {
-        movementControl.AttemptFindPath(gridPosition);
-    }
-
+  
     public void Selected() {
-        selectedBox.SetActive(true);
+        isSelected = true;
+        mat.SetInt("_AnimateOutline", 0);
+        mat.SetFloat("_OutlineThickness", 2.0f);
         mouseInput.Enable();
     }
 
     public void Unselected() {
-        selectedBox.SetActive(false);
+        isSelected = false;
+        mat.SetInt("_AnimateOutline", 0);
+        mat.SetFloat("_OutlineThickness", 0.0f);
         mouseInput.Disable();
     }
 
     public void Hovered() {
-        hoveredBox.SetActive(true);
+        if (isSelected) {
+            mat.SetFloat("_OutlineThickness", 6.0f);
+        }
+        else {
+            mat.SetInt("_AnimateOutline", 1);
+            mat.SetFloat("_OutlineThickness", 4.0f);
+        }
     }
 
     public void Unhovered() {
-        hoveredBox.SetActive(false);
-    }
-
-    public void OnContextMenu(ContextMenu menu) {
-        menu.MoveTo(GridCursor.GridPositionWorld);
+        if (isSelected) {
+            mat.SetFloat("_OutlineThickness", 2.0f);
+        }
+        else {
+            mat.SetInt("_AnimateOutline", 0);
+            mat.SetFloat("_OutlineThickness", 0.0f);
+        }
     }
 
     public void OnDestroy() {
-        // Remove subscriber
         mouseInput.Disable();
         mouseInput.Mouse.MouseLeftClick.performed -= _ => MouseLeftClick();
     }
-
-
 }

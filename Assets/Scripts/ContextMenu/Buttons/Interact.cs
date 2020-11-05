@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-// if furntireu 
+/* Command for staffs to interact a specific furniture
+ * 
+ */
 
 public class Interact : MonoBehaviour, IContextButton 
 {
@@ -15,25 +15,21 @@ public class Interact : MonoBehaviour, IContextButton
 
     public void Enable() {
         if (SelectionManager.SelectedObject != null) {
-            if (SelectionManager.SelectedObject.tag == "Staff" &&
+            if (SelectionManager.SelectedObject.tag == "Staff" && 
                 SelectionManager.HoveredObject.tag == "Furniture") {
-                contextObject = SelectionManager.HoveredObject.GetComponent<Furniture>();
                 gameObject.SetActive(true);
-                return;
+
+                contextObject = SelectionManager.HoveredObject.GetComponent<Furniture>();
             }
-        }
-        gameObject.SetActive(false);
+        } else {
+            gameObject.SetActive(false);
+        }     
     }
 
-    public void OnClick() {
+    public void OnClick() {       
         Staff staff = SelectionManager.SelectedObject.GetComponent<Staff>();
-        Vector3 worldPosition = transform.parent.position - contextObject.interactPosition.position;
-        staff.MoveToGrid(GridCursor.WorldToGrid(worldPosition));
+        staff.MoveToGrid(contextObject.interactDestination);
+
         contextManager.DisableContextMenu();
     }
-
-    private void Update() {
-        
-    }
-
 }

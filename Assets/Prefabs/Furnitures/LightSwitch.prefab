@@ -104,7 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b233c0bfa8b42464e91f9ced26cbb3de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactPosition: {fileID: 1224146608517888547}
+  interactTransform: {fileID: 1224146608517888547}
+  interactDestination: {x: 0, y: 0, z: 0}
 --- !u!1 &5322269020172419611
 GameObject:
   m_ObjectHideFlags: 0

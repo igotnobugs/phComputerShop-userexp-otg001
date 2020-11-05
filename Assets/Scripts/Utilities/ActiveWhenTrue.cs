@@ -7,10 +7,6 @@ public class ActiveWhenTrue : MonoBehaviour
     public bool withHoveredObject;
     public bool withSelectedObject;
 
-    private void Start() {
-
-    }
-
     private void OnEnable() {
         if (withHoveredObject) {
             if (SelectionManager.HoveredObject != null) {
