@@ -1,54 +1,84 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
+
+/* The GridCursor
+ * Sets various values that might be improtant
+ */
 
 public class GridCursor : Singleton<GridCursor>
 {
-    public Vector3 _offSet = new Vector3( 0.5f, 0.5f, 0);
+    public Vector3 offSetPosition = new Vector3(0.5f, 0.5f, 0);
+    public static Vector3 offSet = new Vector3( 0.5f, 0.5f, 0);
 
     //Tiles where gridcursor can go to
-    public Tilemap _SelectableTileMap;
-    
-    public static Vector2 _mousePositionScreen;
-    public static Vector2 _mousePositionWorld;
-    public static Vector3Int _gridPosition;
-    public static Vector3 _gridPositionOffset = new Vector3();
-    
-    private MouseInput _mouseInput;
-    private Camera _mainCamera;
+    public static Tilemap selectableTileMap;
+
+    //public static bool trackCursor = true;
+    [SerializeField] public static Vector2 MousePositionScreen { get; private set; }
+    [SerializeField] public static Vector2 MousePositionWorld { get; private set; }
+    [SerializeField] public static Vector3Int GridPosition { get; private set; }
+    [SerializeField] public static Vector3 GridPositionWorld { get; private set; }
+    [SerializeField] public static Vector3 GridPositionOffset { get; private set; }
+    [SerializeField] public static Vector3 GridPositionActual { get; private set; }
+
+    private MouseInput mouseInput;
+    private Camera mainCamera;
+    private SpriteRenderer gridRenderer;
    
     private void Awake() {
-        _mouseInput = new MouseInput();
+        mouseInput = new MouseInput();
+
+        if (selectableTileMap == null) {
+            GameObject go = GameObject.FindGameObjectWithTag("SelectableTile");
+            selectableTileMap = go.GetComponent<Tilemap>();
+        }
+
+        gridRenderer = GetComponent<SpriteRenderer>();
+        mainCamera = Camera.main;
+        offSet = offSetPosition;
     }
 
     private void OnEnable() {
-        _mouseInput.Enable();
+        mouseInput.Enable();
     }
 
     private void OnDisable() {
-        _mouseInput.Disable();
+        mouseInput.Disable();
     }
-
-    private void Start() {
-        _mainCamera = Camera.main;
-    }
-
 
     private void Update() {
+        TrackCursor();
+    }
 
+    private void TrackCursor() {
         //Various mouse position coordinates
+        MousePositionScreen = mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
 
-        _mousePositionScreen = _mouseInput.Mouse.MousePosition.ReadValue<Vector2>();
+        MousePositionWorld = mainCamera.ScreenToWorldPoint(MousePositionScreen);
 
-        _mousePositionWorld = _mainCamera.ScreenToWorldPoint(_mousePositionScreen);
-
-        _gridPosition = _SelectableTileMap.WorldToCell(_mousePositionWorld);
-
-        if (_SelectableTileMap.HasTile(_gridPosition)) {
-            _gridPositionOffset = _gridPosition + _offSet;
+        GridPosition = selectableTileMap.WorldToCell(MousePositionWorld);
+        
+        if (selectableTileMap.HasTile(GridPosition)) {
+            GridPositionOffset = GridPosition + offSet;
+            GridPositionActual = GridPositionOffset;
+            Color newColor = gridRenderer.color;
+            newColor.a = 0.75f;
+            gridRenderer.color = newColor;
+        } else {
+            Color newColor = gridRenderer.color;
+            newColor.a = 0;
+            gridRenderer.color = newColor;
         }
 
-        transform.position = _gridPositionOffset;
+        transform.position = GridPositionOffset;
+        GridPositionWorld = transform.position;
+    }
+
+    public static Vector3 WorldToGrid(Vector3 worldPosition, bool applyOffset = true) {
+        Vector3 position = selectableTileMap.WorldToCell(worldPosition);
+
+        if (applyOffset) position += offSet;
+
+        return position;
     }
 }
