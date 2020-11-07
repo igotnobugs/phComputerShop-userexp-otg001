@@ -41,6 +41,22 @@ public class @MouseInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseMiddleClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""d6d87850-57e2-40f9-b4fb-6ec104855361"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseMiddleRelease"",
+                    ""type"": ""Button"",
+                    ""id"": ""0497ba12-a7b9-4a8d-b8bf-3ba182c31446"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -76,6 +92,28 @@ public class @MouseInput : IInputActionCollection, IDisposable
                     ""action"": ""MouseRightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ceed61a7-3f3f-467d-aea6-0bf29e6929d2"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMiddleClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a27ecb1-a8e2-445a-aed5-5a28e0f3997d"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMiddleRelease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -87,6 +125,8 @@ public class @MouseInput : IInputActionCollection, IDisposable
         m_Mouse_MouseLeftClick = m_Mouse.FindAction("MouseLeftClick", throwIfNotFound: true);
         m_Mouse_MousePosition = m_Mouse.FindAction("MousePosition", throwIfNotFound: true);
         m_Mouse_MouseRightClick = m_Mouse.FindAction("MouseRightClick", throwIfNotFound: true);
+        m_Mouse_MouseMiddleClick = m_Mouse.FindAction("MouseMiddleClick", throwIfNotFound: true);
+        m_Mouse_MouseMiddleRelease = m_Mouse.FindAction("MouseMiddleRelease", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -139,6 +179,8 @@ public class @MouseInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Mouse_MouseLeftClick;
     private readonly InputAction m_Mouse_MousePosition;
     private readonly InputAction m_Mouse_MouseRightClick;
+    private readonly InputAction m_Mouse_MouseMiddleClick;
+    private readonly InputAction m_Mouse_MouseMiddleRelease;
     public struct MouseActions
     {
         private @MouseInput m_Wrapper;
@@ -146,6 +188,8 @@ public class @MouseInput : IInputActionCollection, IDisposable
         public InputAction @MouseLeftClick => m_Wrapper.m_Mouse_MouseLeftClick;
         public InputAction @MousePosition => m_Wrapper.m_Mouse_MousePosition;
         public InputAction @MouseRightClick => m_Wrapper.m_Mouse_MouseRightClick;
+        public InputAction @MouseMiddleClick => m_Wrapper.m_Mouse_MouseMiddleClick;
+        public InputAction @MouseMiddleRelease => m_Wrapper.m_Mouse_MouseMiddleRelease;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -164,6 +208,12 @@ public class @MouseInput : IInputActionCollection, IDisposable
                 @MouseRightClick.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseRightClick;
                 @MouseRightClick.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseRightClick;
                 @MouseRightClick.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseRightClick;
+                @MouseMiddleClick.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseMiddleClick.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseMiddleClick.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleClick;
+                @MouseMiddleRelease.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleRelease;
+                @MouseMiddleRelease.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleRelease;
+                @MouseMiddleRelease.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMouseMiddleRelease;
             }
             m_Wrapper.m_MouseActionsCallbackInterface = instance;
             if (instance != null)
@@ -177,6 +227,12 @@ public class @MouseInput : IInputActionCollection, IDisposable
                 @MouseRightClick.started += instance.OnMouseRightClick;
                 @MouseRightClick.performed += instance.OnMouseRightClick;
                 @MouseRightClick.canceled += instance.OnMouseRightClick;
+                @MouseMiddleClick.started += instance.OnMouseMiddleClick;
+                @MouseMiddleClick.performed += instance.OnMouseMiddleClick;
+                @MouseMiddleClick.canceled += instance.OnMouseMiddleClick;
+                @MouseMiddleRelease.started += instance.OnMouseMiddleRelease;
+                @MouseMiddleRelease.performed += instance.OnMouseMiddleRelease;
+                @MouseMiddleRelease.canceled += instance.OnMouseMiddleRelease;
             }
         }
     }
@@ -186,5 +242,7 @@ public class @MouseInput : IInputActionCollection, IDisposable
         void OnMouseLeftClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnMouseRightClick(InputAction.CallbackContext context);
+        void OnMouseMiddleClick(InputAction.CallbackContext context);
+        void OnMouseMiddleRelease(InputAction.CallbackContext context);
     }
 }

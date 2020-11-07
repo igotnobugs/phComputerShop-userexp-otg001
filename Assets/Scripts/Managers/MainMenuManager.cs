@@ -11,10 +11,10 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : Singleton<MainMenuManager>  
 {   
     public string GameScene;
-    public UITween transistion;
+    public TransistionUI transistion;
     public Button[] mainMenuButtons;
 
-    private List<UITween> menuButtonTweens = new List<UITween>();
+    private List<HoveredUI> menuButtonTweens = new List<HoveredUI>();
 
     private void Awake() {
         if (transistion == null) Debug.Log("Transistion is missing.");
@@ -23,19 +23,23 @@ public class MainMenuManager : Singleton<MainMenuManager>
 
     private void Start() {
         for (int i = 0; i < mainMenuButtons.Length; i++) {
-            menuButtonTweens.Add(mainMenuButtons[i].GetComponent<UITween>());
+            menuButtonTweens.Add(mainMenuButtons[i].GetComponent<HoveredUI>());
+
+            
         }
+    }
+
+    public void IsButtonHovered() {
+        Debug.Log("A button is hovered!");
     }
 
 
     public void StartGame() {
-        void endFunction() { GoToNextScene(); }
-        transistion.GoToRelativePosition(endFunction);
+        transistion.Show().setOnComplete(() => GoToNextScene());
 
         //Disable buttons and hide
         for (int i = 0; i < mainMenuButtons.Length; i++) {
             mainMenuButtons[i].interactable = false;
-            menuButtonTweens[i].TweenToX(-500, 0.5f, LeanTweenType.easeOutCirc);
         }
     }
 

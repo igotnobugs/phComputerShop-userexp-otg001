@@ -9,11 +9,14 @@ using UnityEngine;
 
 public class ContextMenu : Singleton<ContextMenu> 
 {   
-    public RectTransform canvas;
+    private Canvas canvas;
     private RectTransform rectTransform;
-    
+    private RectTransform canvasRect;
+
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+        canvasRect = canvas.GetComponent<RectTransform>();
     }
 
     private void OnEnable() {    
@@ -33,8 +36,8 @@ public class ContextMenu : Singleton<ContextMenu>
     public void MoveTo(Vector2 worldPos) {      
         Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldPos);
         Vector2 screenPosition = new Vector2(
-                (viewportPosition.x * canvas.sizeDelta.x) - (canvas.sizeDelta.x * 0.5f),
-                (viewportPosition.y * canvas.sizeDelta.y) - (canvas.sizeDelta.y * 0.5f));
+                (viewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
+                (viewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
 
         rectTransform.anchoredPosition = screenPosition;
     }
