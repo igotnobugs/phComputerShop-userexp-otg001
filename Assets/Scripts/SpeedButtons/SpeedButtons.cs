@@ -7,7 +7,7 @@ public class SpeedButtons : MonoBehaviour
 {
    public void ChangeTimeScale(float timeSpeed)
     {
-        Time.timeScale = timeSpeed;
+        Time.timeScale = timeSpeed; 
         Debug.Log("TimeScale Set to: " + timeSpeed.ToString());
     }
 }
