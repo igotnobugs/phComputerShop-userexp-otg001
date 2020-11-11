@@ -39,12 +39,10 @@ public class GameManager : Singleton<GameManager>
     private void Start() {
         Phase = GamePhase.StartTransistion;
 
-        // Once the transistion is done, set up the game
         sun.EarlyMorning(3.0f);
 
-        transistion.Hide().setDelay(0.2f).setOnComplete( () => {   
-            SetUpGame();
-        });
+        // Once the transistion is done, set up the game      
+        transistion.Hide(() => SetUpGame()).setDelay(0.5f);
     }
 
     // Only called at the start of the game
@@ -73,6 +71,7 @@ public class GameManager : Singleton<GameManager>
         sun.EarlyMorning(2.0f);
 
         new Timer().StartTimer(gameObject, 2.0f);
+
         uiSequence.StartSequence(() => SetUpPhase());
 
         phaseInitial.text = "<color=red>C</color>";
@@ -117,7 +116,7 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(4.0f);
 
         SetUpNextDay();
-        yield return null;
+        yield break;
     }
 
     // Get ready for the next day

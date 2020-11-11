@@ -35,6 +35,9 @@ public class Staff : MonoBehaviour, ISelectable
         // Do nothing with context menu open
         if (ContextMenuManager.ContextMenuOpen) return;
 
+        // Don't move when gridcursor is disabled
+        if (GridCursor.isOutside) return;
+
         // Do left click actions, mainly just moving
         MoveToGrid(GridCursor.GridPositionOffset);
     }
@@ -59,11 +62,11 @@ public class Staff : MonoBehaviour, ISelectable
 
     public void Hovered() {
         if (isSelected) {
-            mat.SetFloat("_OutlineThickness", 6.0f);
+            mat.SetFloat("_OutlineThickness", 4.0f);
         }
         else {
             mat.SetInt("_AnimateOutline", 1);
-            mat.SetFloat("_OutlineThickness", 4.0f);
+            mat.SetFloat("_OutlineThickness", 3.0f);
         }
     }
 

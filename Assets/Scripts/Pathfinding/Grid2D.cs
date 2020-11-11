@@ -43,8 +43,6 @@ public class Grid2D : MonoBehaviour
                     Grid[x, y].SetObstacle(true);
                 else
                     Grid[x, y].SetObstacle(false);
-
-
             }
         }
     }
@@ -110,6 +108,7 @@ public class Grid2D : MonoBehaviour
     //Draws visual representation of grid
     void OnDrawGizmos()
     {
+        
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
 
         if (Grid != null)
@@ -127,5 +126,6 @@ public class Grid2D : MonoBehaviour
 
             }
         }
+        
     }
 }
