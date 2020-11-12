@@ -32,7 +32,7 @@ public class MainUISequence : Singleton<MainUISequence>
 
         for (int i = 0; i < transistionInterfaces.Length; i++) {
             transistionInterfaces[i].Show();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         yield return new WaitForSeconds(0.5f);

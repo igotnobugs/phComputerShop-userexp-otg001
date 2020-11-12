@@ -59,7 +59,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
 
         yield return new WaitForSeconds(1.5f);
 
-        SceneManager.LoadScene(GameScene, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(GameScene, LoadSceneMode.Single);
         yield return null;
     }
 

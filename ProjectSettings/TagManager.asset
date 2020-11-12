@@ -51,9 +51,15 @@ TagManager:
   - name: Floor
     uniqueID: 888673125
     locked: 0
+  - name: Wall
+    uniqueID: 251433105
+    locked: 0
   - name: Effects
     uniqueID: 2427104563
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Fore Furnitures
+    uniqueID: 2122404501
     locked: 0

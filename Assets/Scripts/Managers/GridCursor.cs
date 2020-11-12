@@ -9,6 +9,7 @@ public class GridCursor : Singleton<GridCursor>
 {
     public Vector3 offSetPosition = new Vector3(0.5f, 0.5f, 0);
     public static Vector3 offSet = new Vector3( 0.5f, 0.5f, 0);
+    public static bool isOutside = false;
 
     //Tiles where gridcursor can go to
     public static Tilemap selectableTileMap;
@@ -64,10 +65,12 @@ public class GridCursor : Singleton<GridCursor>
             Color newColor = gridRenderer.color;
             newColor.a = 0.75f;
             gridRenderer.color = newColor;
+            isOutside = false;
         } else {
             Color newColor = gridRenderer.color;
             newColor.a = 0;
             gridRenderer.color = newColor;
+            isOutside = true;
         }
 
         transform.position = GridPositionOffset;
