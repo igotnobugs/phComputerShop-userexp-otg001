@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public RadialTimer radialTimer;
     [SerializeField] private StaffPanelManager staffPanel;
     [SerializeField] private MainUISequence uiSequence;
+    [SerializeField] private DialogueTrigger introDialogue;
 
     [Header("Game Related")]
     [SerializeField] public Staff[] staffs;
@@ -46,7 +47,8 @@ public class GameManager : Singleton<GameManager>
     }
 
     // Only called at the start of the game
-    private void SetUpGame() {      
+    private void SetUpGame() {
+        introDialogue.TriggerDialogue();
         uiSequence.StartSequence(() => StartEarlyMorning());
     }
 
@@ -81,6 +83,7 @@ public class GameManager : Singleton<GameManager>
     public void SetUpPhase() {
         Phase = GamePhase.SettingUp;
 
+        //introDialogue.TriggerDialogue();
         openShopButton.Show();
     }
 
