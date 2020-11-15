@@ -47,7 +47,8 @@ public class GameManager : Singleton<GameManager>
     }
 
     // Only called at the start of the game
-    private void SetUpGame() {      
+    private void SetUpGame() {
+        introDialogue.TriggerDialogue();
         uiSequence.StartSequence(() => StartEarlyMorning());
     }
 
@@ -82,7 +83,7 @@ public class GameManager : Singleton<GameManager>
     public void SetUpPhase() {
         Phase = GamePhase.SettingUp;
 
-        introDialogue.TriggerDialogue();
+        //introDialogue.TriggerDialogue();
         openShopButton.Show();
     }
 
