@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour
 {
     public Text nameText;
-    public Text dialougeText;
+    public Text dialogueText;
+    public TransistionUI dialogueBox;
 
     private Queue<string> sentences;
 
@@ -29,6 +30,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         DisplayNextSentence();
+        dialogueBox.Show();
     }
 
     public void DisplayNextSentence()
@@ -46,10 +48,10 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator TypeSentence (string sentence)
     {
-        dialougeText.text = "";
+        dialogueText.text = "";
         foreach (char letter in sentence.ToCharArray())
         {
-            dialougeText.text += letter;
+            dialogueText.text += letter;
             yield return null;
         }
     }
@@ -57,5 +59,6 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         Debug.Log("End of Conversation");
+        dialogueBox.Hide();
     }
 }

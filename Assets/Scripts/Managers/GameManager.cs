@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public RadialTimer radialTimer;
     [SerializeField] private StaffPanelManager staffPanel;
     [SerializeField] private MainUISequence uiSequence;
+    [SerializeField] private DialogueTrigger introDialogue;
 
     [Header("Game Related")]
     [SerializeField] public Staff[] staffs;
@@ -81,6 +82,7 @@ public class GameManager : Singleton<GameManager>
     public void SetUpPhase() {
         Phase = GamePhase.SettingUp;
 
+        introDialogue.TriggerDialogue();
         openShopButton.Show();
     }
 
