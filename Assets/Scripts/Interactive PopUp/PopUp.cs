@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 /* Attached to a pop-up prefab
  * Created by a popup manager
+ * 
  */
 
-public class Popup : MonoBehaviour 
+public class PopUp : MonoBehaviour 
 {
     [SerializeField] private TextMeshProUGUI popUpTitle = null;
     [SerializeField] private TextMeshProUGUI popUpText = null;
@@ -18,8 +20,8 @@ public class Popup : MonoBehaviour
     private Canvas canvas;
     private RectTransform rectTransform;
     private RectTransform canvasRect;
-    public BaseUI targetUI;
-
+    private BaseUI targetUI;
+    private Action onCompleteFunc; 
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
@@ -31,9 +33,6 @@ public class Popup : MonoBehaviour
         closeButton.onClick.AddListener(() => {
             DestroyPopup();
         });
-        if (targetUI != null) {
-            targetUI.OnActivated += DestroyPopup;
-        }
     }
 
     // When initiated, must run the Init
@@ -43,21 +42,24 @@ public class Popup : MonoBehaviour
         targetUI = ui;
     }
 
-
-    private void Update() {
-        
+    public void MoveTo(Vector2 worldPos) {
+        rectTransform.position = worldPos;
     }
 
-    public void MoveTo(Vector2 worldPos) {
-        Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldPos);
-        Vector2 screenPosition = new Vector2(
-                (viewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
-                (viewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
+    public void SetListener(BaseUI targetUI) {
+        targetUI.OnActivating += DestroyPopup;
+    }
 
-        rectTransform.anchoredPosition = screenPosition;
+    public void SetOnComplete(Action function) {
+        onCompleteFunc = function;
     }
 
     public void DestroyPopup() {
-        
+        onCompleteFunc?.Invoke();
+        Destroy(gameObject);
+    }
+
+    private void OnDestroy() {
+        targetUI.OnActivating -= DestroyPopup;
     }
 }

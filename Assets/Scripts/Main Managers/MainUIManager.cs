@@ -6,14 +6,18 @@ using UnityEngine;
  * 
  */
 
-public class MainUISequence : Singleton<MainUISequence> 
+public class MainUIManager : Singleton<MainUIManager> 
 {
+    public BaseUI ledger;
+    public BaseUI shop;
+    public BaseUI staffPanel;
+    public BaseUI clipboard;
+
     public TransistionUI[] transistionInterfaces;
-    public TransistionUI shopUI;
 
     private Action onCompleteFunction;
     private bool isUIShown;
-
+    private TransistionUI shopTransisition = null;
 
     public void StartSequence(Action onComplete, bool showUI = true) {
         onCompleteFunction = onComplete;
@@ -23,7 +27,7 @@ public class MainUISequence : Singleton<MainUISequence>
         else {
             StartCoroutine(StartHideSequence());
         }
-
+        shopTransisition = shop.GetComponent<TransistionUI>();
     }
 
     private IEnumerator StartShowSequence() {
@@ -54,5 +58,15 @@ public class MainUISequence : Singleton<MainUISequence>
 
         onCompleteFunction?.Invoke();
         yield break;
+    }
+
+    // During set up
+    public void StartSetUpPhase() {
+        shopTransisition.Show();
+    }
+
+    // During open phase
+    public void StartOpenPhase() {
+        shopTransisition.Hide();
     }
 }
