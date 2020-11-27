@@ -3,61 +3,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //Reference: https://www.youtube.com/watch?v=_nRzoTzeyxU&ab_channel=Brackeys
+/* Modified to be scaleable and extendable
+ */
+
 public class DialogueManager : MonoBehaviour
 {
-    public Text nameText;
-    public Text dialogueText;
-    public TransistionUI dialogueBox;
+    public DialogueBox dialogueBox;
 
-    private Queue<string> sentences;
+    private Queue<Script> scripts;
+    private Action onCompleteFunc;
 
 
     void Start()
     {
-        sentences = new Queue<string>();
+        scripts = new Queue<Script>();
     }
 
-    public void StartDialogue(Dialogue dialogue)
-    {
-        nameText.text = dialogue.name;
-        sentences.Clear();
+    public void StartDialogue(Dialogue dialogue, Action onCompleteFunc)
+    {      
+        //scripts.Clear();
+        //dialogueBox.nextButton.onClick.AddListener(() => DisplayNextSentence());
 
-        foreach (string sentence in dialogue.sentences)
+        dialogueBox.NextButtonOnClick(() => DisplayNextSentence());
+        foreach (Script script in dialogue.scripts)
         {
-            sentences.Enqueue(sentence);
+            scripts.Enqueue(script);
         }
 
-        DisplayNextSentence();
-        dialogueBox.Show();    
+        this.onCompleteFunc = onCompleteFunc;
+        dialogueBox.panelTransistion.Show(() => DisplayNextSentence());
     }
 
     public void DisplayNextSentence()
     {
-        if (sentences.Count == 0)
+        if (scripts.Count == 0)
         {
             EndDialogue();
             return;
         }
 
-        string sentence = sentences.Dequeue();
-        StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
-    }
-
-    IEnumerator TypeSentence (string sentence)
-    {
-        dialogueText.text = "";
-        foreach (char letter in sentence.ToCharArray())
-        {
-            dialogueText.text += letter;
-            yield return null;
-        }
+        Script script = scripts.Dequeue();
+        dialogueBox.Set(script.name, script.sentence);
+        dialogueBox.AdvanceDialogue();
     }
 
     void EndDialogue()
     {
         Debug.Log("End of Conversation");
+
+        dialogueBox.panelTransistion.Hide(() => {
+            scripts.Clear();
+            onCompleteFunc();          
+        });
+    }
+
+    public void TriggerDialogue(Dialogue dialogue, Action onCompleteFunc) {
+        StartDialogue(dialogue, onCompleteFunc);
     }
 }
