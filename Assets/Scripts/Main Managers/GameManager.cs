@@ -29,9 +29,15 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Game Related")]
     [SerializeField] public Staff[] staffs;
-    [SerializeField] public float shopOpenTime = 10.0f;
+    [SerializeField] public float shopOpenTime = 20.0f;
 
     public StoreData store = new StoreData();
+
+    [Header("Testing")]
+    public bool skipTutorial = true;
+    public Transform door;
+    public Customer testCustomer;
+
 
     private void Awake() {
         staffPanel = GetComponent<StaffPanelManager>();
@@ -45,13 +51,21 @@ public class GameManager : Singleton<GameManager>
 
         // Once the transistion is done, set up the game      
         // If game is new do this
-        transistion.Hide(() => StartCoroutine(NewGameSequence())).setDelay(0.5f);
+        transistion.Hide(() => {
+            if (skipTutorial) {
+                mainUIManager.StartSequence(() => {
+                    StartEarlyMorning();
+                });
+                
+            } else {
+                StartCoroutine(NewGameSequence());
+            }
+
+        }).setDelay(0.5f);
     }
 
     // Includes tutorials
     private IEnumerator NewGameSequence() {
-        Phase = GamePhase.ClosingSequence;
-
         //Do the introduction scene
         bool isIntroDone = false;
         introDialogue.TriggerDialogue(() => isIntroDone = true);
@@ -131,6 +145,10 @@ public class GameManager : Singleton<GameManager>
     public void OpenStore() {
         Phase = GamePhase.OpenStore;
 
+        //Spawn at the door
+        Customer newCustomer = Instantiate(testCustomer, door.position, testCustomer.transform.rotation);
+        newCustomer.door = door;
+
         phaseInitial.text = "<color=green>O</color>";
         mainUIManager.StartOpenPhase();
         openShopButton.Hide();
@@ -142,6 +160,11 @@ public class GameManager : Singleton<GameManager>
     // Store is closing
     private void StartClosing() {
         Phase = GamePhase.StartClosing;
+
+        // Make customers leave forcefully if present
+        if (testCustomer != null) {
+            testCustomer.LeaveTheStore();
+        }
 
         // Check for events here maybe?
 

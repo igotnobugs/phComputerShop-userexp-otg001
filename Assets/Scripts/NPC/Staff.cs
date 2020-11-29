@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,46 +8,38 @@ using UnityEngine.EventSystems;
  * Contains the staffObject
  */
 
-public class Staff : MonoBehaviour, ISelectable
+public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler 
 {
     public StaffObject attributes;
 
     private MouseInput mouseInput;
-    private AStarMovement movementControl;
-    private Material mat;
+    
     private bool isSelected = false;
+    private bool allowSelection = false;
 
-    private void Awake() {
-        mouseInput = new MouseInput();
-        movementControl = GetComponent<AStarMovement>();
-        mat = GetComponentInChildren<SpriteRenderer>().material;
+    protected override void Awake() {
+        base.Awake();
+        mouseInput = new MouseInput();       
     }
 
     private void OnDisable() {
         mouseInput.Disable();
     }
 
-    private void Start() {     
-        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();      
+    private void Start() {
+        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
         mouseInput.Disable();
     }
 
     private void MouseLeftClick() {
-        // Do nothing with context menu open
         if (ContextMenuManager.ContextMenuOpen) return;
+        if (GridCursor.IsDisabled()) return;
 
-        // Don't move when gridcursor is disabled
-        if (GridCursor.isOutside) return;
-
-        // Do left click actions, mainly just moving
         MoveToGrid(GridCursor.GridPositionOffset);
-    }
-
-    public void MoveToGrid(Vector3 destination) {
-        movementControl.AttemptFindPath(destination);
     }
   
     public void Selected() {
+        if (!allowSelection) return;
         isSelected = true;
         mat.SetInt("_AnimateOutline", 0);
         mat.SetFloat("_OutlineThickness", 2.0f);
@@ -54,6 +47,7 @@ public class Staff : MonoBehaviour, ISelectable
     }
 
     public void Unselected() {
+        if (!allowSelection) return;
         isSelected = false;
         mat.SetInt("_AnimateOutline", 0);
         mat.SetFloat("_OutlineThickness", 0.0f);
@@ -61,6 +55,7 @@ public class Staff : MonoBehaviour, ISelectable
     }
 
     public void Hovered() {
+        if (!allowSelection) return;
         if (isSelected) {
             mat.SetFloat("_OutlineThickness", 4.0f);
         }
@@ -71,6 +66,7 @@ public class Staff : MonoBehaviour, ISelectable
     }
 
     public void Unhovered() {
+        if (!allowSelection) return;
         if (isSelected) {
             mat.SetFloat("_OutlineThickness", 2.0f);
         }
@@ -80,8 +76,28 @@ public class Staff : MonoBehaviour, ISelectable
         }
     }
 
+    public void EnableSelection() {
+        allowSelection = true;
+    }
+
+    public void DisableSelection() {
+        allowSelection = false;
+    }
+
     public void OnDestroy() {
         mouseInput.Disable();
         mouseInput.Mouse.MouseLeftClick.performed -= _ => MouseLeftClick();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        SelectionManager.HoveredObject = gameObject;
+        Hovered();
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        if (SelectionManager.HoveredObject == gameObject) {
+            SelectionManager.HoveredObject = null;
+        }
+        Unhovered();
     }
 }

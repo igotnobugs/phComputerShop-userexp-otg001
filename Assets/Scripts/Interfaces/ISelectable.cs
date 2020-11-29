@@ -5,4 +5,7 @@
 
     void Selected();
     void Unselected();
+
+    void EnableSelection();
+    void DisableSelection();
 }

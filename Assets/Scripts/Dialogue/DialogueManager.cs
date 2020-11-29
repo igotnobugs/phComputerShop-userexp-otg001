@@ -52,7 +52,7 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
-        Debug.Log("End of Conversation");
+        //Debug.Log("End of Conversation");
 
         dialogueBox.panelTransistion.Hide(() => {
             scripts.Clear();
