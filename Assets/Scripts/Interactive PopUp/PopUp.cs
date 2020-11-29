@@ -38,15 +38,15 @@ public class PopUp : MonoBehaviour
     // When initiated, must run the Init
     public void Init(string title, string content, BaseUI ui = null) {
         popUpTitle.text = title;
-        popUpText.text = content;
-        targetUI = ui;
+        popUpText.text = content;       
     }
 
     public void MoveTo(Vector2 worldPos) {
         rectTransform.position = worldPos;
     }
 
-    public void SetListener(BaseUI targetUI) {
+    public void SetListener(BaseUI ui) {
+        targetUI = ui;
         targetUI.OnActivating += DestroyPopup;
     }
 
@@ -56,10 +56,7 @@ public class PopUp : MonoBehaviour
 
     public void DestroyPopup() {
         onCompleteFunc?.Invoke();
-        Destroy(gameObject);
-    }
-
-    private void OnDestroy() {
         targetUI.OnActivating -= DestroyPopup;
+        Destroy(gameObject);
     }
 }

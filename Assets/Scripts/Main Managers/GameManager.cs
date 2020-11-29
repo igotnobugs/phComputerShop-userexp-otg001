@@ -64,7 +64,7 @@ public class GameManager : Singleton<GameManager>
         //Ledger Popup
         bool isLedgerPopUpDone = false;
         PopUp ledgerPopup = popUpManager.CreatePopUp(mainUIManager.ledger.transform.position);
-        ledgerPopup.Init("Ledger", "Contains all the past and future transactions", mainUIManager.ledger);
+        ledgerPopup.Init("Ledger", "Contains all the past and future transactions");
         ledgerPopup.SetListener(mainUIManager.ledger.GetComponent<ActiveUI>());
         ledgerPopup.SetOnComplete(() => isLedgerPopUpDone = true);
         yield return new WaitUntil(() => isLedgerPopUpDone);
@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager>
         //Shop Popup
         bool isShopPopUpDone = false;
         PopUp shopPopup = popUpManager.CreatePopUp(mainUIManager.shop.transform.position + new Vector3(100, 0, 0));
-        shopPopup.Init("Shop", "Lets you to buy items. It disappears when the you start opening.", mainUIManager.shop);
+        shopPopup.Init("Shop", "Lets you to buy items. It disappears when the you start opening.");
         shopPopup.SetListener(mainUIManager.shop.GetComponent<ActiveUI>());
         shopPopup.SetOnComplete(() => isShopPopUpDone = true);
         yield return new WaitUntil(() => isShopPopUpDone);
@@ -80,7 +80,7 @@ public class GameManager : Singleton<GameManager>
         //Clipboard Popup
         bool isClipboardDone = false;
         PopUp clipboardPopup = popUpManager.CreatePopUp(mainUIManager.clipboard.transform.position + new Vector3(-250, 0, 0));
-        clipboardPopup.Init("Clipboard", "Shows the attributes of a selected staff.", mainUIManager.clipboard);
+        clipboardPopup.Init("Clipboard", "Shows the attributes of a selected staff.");
         clipboardPopup.SetListener(mainUIManager.clipboard.GetComponent<ActiveUI>());
         clipboardPopup.SetOnComplete(() => isClipboardDone = true);
         yield return new WaitUntil(() => isClipboardDone);
@@ -96,6 +96,7 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < staffs.Length; i++) {
             staffPanel.CreateStaffButton(staffs[i]);
+            staffs[i].EnableSelection();
         }
 
         new Timer().StartTimer(gameObject, 1.0f).setOnComplete(() => SetUpPhase());
