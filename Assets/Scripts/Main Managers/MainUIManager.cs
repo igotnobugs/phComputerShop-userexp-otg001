@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
-/* Sequences the UI animation
+/* Sequences the UI animation and other things
  * 
  */
 
@@ -19,6 +20,11 @@ public class MainUIManager : Singleton<MainUIManager>
     private bool isUIShown;
     private TransistionUI shopTransisition = null;
 
+    public TextMeshProUGUI availableMoney;
+    public TextMeshProUGUI moneyGoal;
+    public TextMeshProUGUI day;
+    public TextMeshProUGUI weekMonth;
+
     public void StartSequence(Action onComplete, bool showUI = true) {
         onCompleteFunction = onComplete;
         if (showUI) {
@@ -28,6 +34,13 @@ public class MainUIManager : Singleton<MainUIManager>
             StartCoroutine(StartHideSequence());
         }
         shopTransisition = shop.GetComponent<TransistionUI>();
+    }
+
+    public void Update() {
+        availableMoney.text = GameManager.store.money.ToString();
+        moneyGoal.text = GameManager.store.moneyNeeded.ToString();
+        day.text = GameManager.store.GetCurrentDayShortString();
+        weekMonth.text = GameManager.store.GetWeekMonth();
     }
 
     private IEnumerator StartShowSequence() {

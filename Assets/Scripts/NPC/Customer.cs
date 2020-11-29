@@ -16,7 +16,8 @@ public class Customer : NPC
     public int timeToUse; //How long to use the computer
 
     protected Counter counter;
-    protected Computer computerToUse; 
+    protected Computer computerToUse;
+    public List<Customer> costumerList;
 
     private void Start() {
         //Find a counter
@@ -37,6 +38,8 @@ public class Customer : NPC
         //Do stuff maybe some effects?
 
         yield return new WaitForSeconds(timeAtCounter);
+        // PAY
+        GameManager.store.AddMoney(amountToPay);
 
         GoToComputer();
         yield break;
@@ -82,6 +85,7 @@ public class Customer : NPC
         Vector3 doorGridPosition = GridCursor.WorldToGrid(door.position);
 
         MoveToGrid(doorGridPosition, () => {
+            costumerList.Remove(this);
             Destroy(gameObject);
         });
     }

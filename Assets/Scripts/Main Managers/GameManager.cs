@@ -26,20 +26,24 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private MainUIManager mainUIManager;
     [SerializeField] private DialogueTrigger introDialogue = null;
     [SerializeField] private PopUpManager popUpManager = null;
+    [SerializeField] private EndDayUI endDayPanel = null;
 
     [Header("Game Related")]
     [SerializeField] public Staff[] staffs;
     [SerializeField] public float shopOpenTime = 20.0f;
 
-    public StoreData store = new StoreData();
+    public StoreData storeData;
+    public static StoreData store;
 
     [Header("Testing")]
     public bool skipTutorial = true;
     public Transform door;
     public Customer testCustomer;
+    public List<Customer> customers;
 
 
     private void Awake() {
+        store = storeData;
         staffPanel = GetComponent<StaffPanelManager>();
         mainUIManager = GetComponent<MainUIManager>();
     }
@@ -148,6 +152,10 @@ public class GameManager : Singleton<GameManager>
         //Spawn at the door
         Customer newCustomer = Instantiate(testCustomer, door.position, testCustomer.transform.rotation);
         newCustomer.door = door;
+        newCustomer.costumerList = customers;
+
+        customers.Add(newCustomer);
+        
 
         phaseInitial.text = "<color=green>O</color>";
         mainUIManager.StartOpenPhase();
@@ -162,8 +170,10 @@ public class GameManager : Singleton<GameManager>
         Phase = GamePhase.StartClosing;
 
         // Make customers leave forcefully if present
-        if (testCustomer != null) {
-            testCustomer.LeaveTheStore();
+        if (customers.Count > 0) {
+            foreach (Customer c in customers) {
+                c.LeaveTheStore();
+            }         
         }
 
         // Check for events here maybe?
@@ -178,10 +188,15 @@ public class GameManager : Singleton<GameManager>
 
         mainUIManager.StartSequence(null, false);
 
+
         // Mostly just money deductions and stuff
+        bool doneCalculation = false;
+        endDayPanel.transistion.Show(() => endDayPanel.Calculate());
+        endDayPanel.Init(() => { doneCalculation = true; });
+        
+        yield return new WaitUntil(() => doneCalculation);
 
-        yield return new WaitForSeconds(4.0f);
-
+        endDayPanel.transistion.Hide();
         SetUpNextDay();
         yield break;
     }

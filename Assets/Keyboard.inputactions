@@ -1,0 +1,33 @@
+{
+    "name": "Keyboard",
+    "maps": [
+        {
+            "name": "Keyboard",
+            "id": "e7b5d7ff-eedb-4aaf-9248-02eec9663d2a",
+            "actions": [
+                {
+                    "name": "Space Bar",
+                    "type": "Button",
+                    "id": "7ed00485-8bed-4e36-b26d-922c3e7a6b33",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f4b24a3e-bf31-4020-aca7-4a2d633cd212",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Space Bar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

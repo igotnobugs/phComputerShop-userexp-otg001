@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 0}
-  amountToPay: 0
+  amountToPay: 20
   timeAtCounter: 1
   timeToUse: 5
 --- !u!1 &4021730394343988177
