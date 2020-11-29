@@ -96,7 +96,7 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < staffs.Length; i++) {
             staffPanel.CreateStaffButton(staffs[i]);
-            staffs[i].EnableSelection();
+            //staffs[i].EnableSelection();
         }
 
         new Timer().StartTimer(gameObject, 1.0f).setOnComplete(() => SetUpPhase());
