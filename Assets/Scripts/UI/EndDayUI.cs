@@ -5,9 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/* Should be called the endDayPhase and not UI
+ * 
+ */
 
 public class EndDayUI : MonoBehaviour
 {
+    public float sequenceSpeed = 0.5f;
     public Button confirm;
     public TransistionUI transistion;
 
@@ -27,11 +31,17 @@ public class EndDayUI : MonoBehaviour
 
     // Enumerate
     public void Calculate() {
-        earnings.text = GameManager.store.earnings.ToString();
+        StartCoroutine(StartCalculating());
+    }
 
-        //test
+    private IEnumerator StartCalculating() {
+        earnings.text = GameManager.store.earnings.ToString();
+        yield return new WaitForSeconds(sequenceSpeed);
+
+        //wage test
         int wage = -200;
         wages.text = wage.ToString();
+        yield return new WaitForSeconds(sequenceSpeed);
 
         int profit = GameManager.store.earnings + wage;
         profits.text = "";
@@ -39,19 +49,22 @@ public class EndDayUI : MonoBehaviour
             profits.color = positiveNetProfit;
             profits.text = "+";
         }
-        else if(profit == 0) {
+        else if (profit == 0) {
             profits.color = positiveNetProfit;
         }
         else {
             profits.color = negativeNetProfit;
         }
-
         profits.text += profit.ToString();
+        yield return new WaitForSeconds(sequenceSpeed);
 
-
+    
+        GameManager.store.AddMoneyNoEarnings(profit);
         total.text = GameManager.store.money.ToString();
 
         confirm.gameObject.SetActive(true);
+
+        yield break;
     }
 
 }

@@ -63,3 +63,6 @@ TagManager:
   - name: Fore Furnitures
     uniqueID: 2122404501
     locked: 0
+  - name: Always Front
+    uniqueID: 3038615399
+    locked: 0

@@ -13,7 +13,7 @@ public class NPC : MonoBehaviour
         mat = GetComponentInChildren<SpriteRenderer>().material;
     }
 
-    public void MoveToGrid(Vector3 destination, Action onCompleteFunc = null) {
+    public virtual void MoveToGrid(Vector3 destination, Action onCompleteFunc = null) {
         movementControl.AttemptFindPath(destination, onCompleteFunc);
     }
 }

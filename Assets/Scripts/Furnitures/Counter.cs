@@ -11,11 +11,16 @@ public class Counter : Furniture
         Vector3 interactDestination = GridCursor.WorldToGrid(lineTransfrom.position);
         interactor.MoveToGrid(interactDestination, () => {
             onComplete?.Invoke();
-            Interacted();
+            InteractedAsCustomer();
         });
     }
 
     protected override void Interacted() {
+        isOccupied = true;
+    }
+
+    public void InteractedAsCustomer() {
 
     }
+
 }

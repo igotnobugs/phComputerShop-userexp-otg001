@@ -93,7 +93,10 @@ public class StoreData
             money += amount;
             earnings += amount;
         }     
+    }
 
+    public void AddMoneyNoEarnings(int amount) {
+        money += amount;
     }
 
     public void DeductMoney(int amount) {

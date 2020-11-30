@@ -11,11 +11,15 @@ using UnityEngine.EventSystems;
 public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler 
 {
     public StaffObject attributes;
+    [SerializeField] public Furniture mannedFurniture = null;
 
     private MouseInput mouseInput;
     
     private bool isSelected = false;
     private bool allowSelection = false;
+
+    public GameObject energyCounter;
+   
 
     protected override void Awake() {
         base.Awake();
@@ -37,7 +41,15 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
 
         MoveToGrid(GridCursor.GridPositionOffset);
     }
-  
+
+    public override void MoveToGrid(Vector3 destination, Action onCompleteFunc = null) {
+        if (mannedFurniture != null) {
+            mannedFurniture.SetUnoccupied();
+            mannedFurniture = null;
+        }
+        base.MoveToGrid(destination, onCompleteFunc);      
+    }
+
     public void Selected() {
         if (!allowSelection) return;
         isSelected = true;
@@ -57,12 +69,13 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
     public void Hovered() {
         if (!allowSelection) return;
         if (isSelected) {
-            mat.SetFloat("_OutlineThickness", 4.0f);
+            mat.SetFloat("_OutlineThickness", 4.0f);           
         }
         else {
             mat.SetInt("_AnimateOutline", 1);
-            mat.SetFloat("_OutlineThickness", 3.0f);
+            mat.SetFloat("_OutlineThickness", 3.0f);           
         }
+        energyCounter.SetActive(true);
     }
 
     public void Unhovered() {
@@ -74,6 +87,7 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
             mat.SetInt("_AnimateOutline", 0);
             mat.SetFloat("_OutlineThickness", 0.0f);
         }
+        energyCounter.SetActive(false);
     }
 
     public void EnableSelection() {

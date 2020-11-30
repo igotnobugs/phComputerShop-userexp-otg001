@@ -86,4 +86,8 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
     protected virtual void Interacted() {
         
     }
+
+    public void SetUnoccupied() {
+        isOccupied = false;
+    }
 }

@@ -36,7 +36,7 @@ public class PopUp : MonoBehaviour
     }
 
     // When initiated, must run the Init
-    public void Init(string title, string content, BaseUI ui = null) {
+    public void Init(string title, string content) {
         popUpTitle.text = title;
         popUpText.text = content;       
     }

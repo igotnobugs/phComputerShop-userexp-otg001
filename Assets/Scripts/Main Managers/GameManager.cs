@@ -110,7 +110,7 @@ public class GameManager : Singleton<GameManager>
 
     // The first day after transition
     private void StartEarlyMorning() {
-        Phase = GamePhase.NightToDawnTransistion;
+        Phase = GamePhase.NightToDawnTransistion;    
 
         for (int i = 0; i < staffs.Length; i++) {
             staffPanel.CreateStaffButton(staffs[i]);
@@ -123,10 +123,10 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    // After the night after
+    // next day LOOP
     private void StartEarlyMorningLoop() {
         Phase = GamePhase.NightToDawnTransistion;
-        
+        store.AdvanceDay();
         sun.EarlyMorning(2.0f);
 
         new Timer().StartTimer(gameObject, 2.0f);
@@ -207,7 +207,6 @@ public class GameManager : Singleton<GameManager>
 
         sun.GoToNextDay();
 
-        
         StartEarlyMorningLoop();
     }
 }

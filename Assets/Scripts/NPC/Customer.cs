@@ -37,6 +37,8 @@ public class Customer : NPC
     private IEnumerator StartTalking() {
         //Do stuff maybe some effects?
 
+        yield return new WaitUntil(() => counter.isOccupied);
+
         yield return new WaitForSeconds(timeAtCounter);
         // PAY
         GameManager.store.AddMoney(amountToPay);
