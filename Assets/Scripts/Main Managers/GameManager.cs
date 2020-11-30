@@ -26,14 +26,24 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private MainUIManager mainUIManager;
     [SerializeField] private DialogueTrigger introDialogue = null;
     [SerializeField] private PopUpManager popUpManager = null;
+    [SerializeField] private EndDayUI endDayPanel = null;
 
     [Header("Game Related")]
     [SerializeField] public Staff[] staffs;
-    [SerializeField] public float shopOpenTime = 10.0f;
+    [SerializeField] public float shopOpenTime = 20.0f;
 
-    public StoreData store = new StoreData();
+    public StoreData storeData;
+    public static StoreData store;
+
+    [Header("Testing")]
+    public bool skipTutorial = true;
+    public Transform door;
+    public Customer testCustomer;
+    public List<Customer> customers;
+
 
     private void Awake() {
+        store = storeData;
         staffPanel = GetComponent<StaffPanelManager>();
         mainUIManager = GetComponent<MainUIManager>();
     }
@@ -45,13 +55,21 @@ public class GameManager : Singleton<GameManager>
 
         // Once the transistion is done, set up the game      
         // If game is new do this
-        transistion.Hide(() => StartCoroutine(NewGameSequence())).setDelay(0.5f);
+        transistion.Hide(() => {
+            if (skipTutorial) {
+                mainUIManager.StartSequence(() => {
+                    StartEarlyMorning();
+                });
+                
+            } else {
+                StartCoroutine(NewGameSequence());
+            }
+
+        }).setDelay(0.5f);
     }
 
     // Includes tutorials
     private IEnumerator NewGameSequence() {
-        Phase = GamePhase.ClosingSequence;
-
         //Do the introduction scene
         bool isIntroDone = false;
         introDialogue.TriggerDialogue(() => isIntroDone = true);
@@ -92,7 +110,7 @@ public class GameManager : Singleton<GameManager>
 
     // The first day after transition
     private void StartEarlyMorning() {
-        Phase = GamePhase.NightToDawnTransistion;
+        Phase = GamePhase.NightToDawnTransistion;    
 
         for (int i = 0; i < staffs.Length; i++) {
             staffPanel.CreateStaffButton(staffs[i]);
@@ -105,10 +123,10 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    // After the night after
+    // next day LOOP
     private void StartEarlyMorningLoop() {
         Phase = GamePhase.NightToDawnTransistion;
-        
+        store.AdvanceDay();
         sun.EarlyMorning(2.0f);
 
         new Timer().StartTimer(gameObject, 2.0f);
@@ -131,6 +149,14 @@ public class GameManager : Singleton<GameManager>
     public void OpenStore() {
         Phase = GamePhase.OpenStore;
 
+        //Spawn at the door
+        Customer newCustomer = Instantiate(testCustomer, door.position, testCustomer.transform.rotation);
+        newCustomer.door = door;
+        newCustomer.costumerList = customers;
+
+        customers.Add(newCustomer);
+        
+
         phaseInitial.text = "<color=green>O</color>";
         mainUIManager.StartOpenPhase();
         openShopButton.Hide();
@@ -142,6 +168,13 @@ public class GameManager : Singleton<GameManager>
     // Store is closing
     private void StartClosing() {
         Phase = GamePhase.StartClosing;
+
+        // Make customers leave forcefully if present
+        if (customers.Count > 0) {
+            foreach (Customer c in customers) {
+                c.LeaveTheStore();
+            }         
+        }
 
         // Check for events here maybe?
 
@@ -155,10 +188,15 @@ public class GameManager : Singleton<GameManager>
 
         mainUIManager.StartSequence(null, false);
 
+
         // Mostly just money deductions and stuff
+        bool doneCalculation = false;
+        endDayPanel.transistion.Show(() => endDayPanel.Calculate());
+        endDayPanel.Init(() => { doneCalculation = true; });
+        
+        yield return new WaitUntil(() => doneCalculation);
 
-        yield return new WaitForSeconds(4.0f);
-
+        endDayPanel.transistion.Hide();
         SetUpNextDay();
         yield break;
     }
@@ -169,7 +207,6 @@ public class GameManager : Singleton<GameManager>
 
         sun.GoToNextDay();
 
-        
         StartEarlyMorningLoop();
     }
 }
