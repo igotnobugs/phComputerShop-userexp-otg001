@@ -3,12 +3,9 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/* Sequences the UI animation and other things
- * 
- */
-
 public class MainUIManager : Singleton<MainUIManager> 
 {
+    public BaseUI management;
     public BaseUI ledger;
     public BaseUI shop;
     public BaseUI staffPanel;
@@ -16,14 +13,15 @@ public class MainUIManager : Singleton<MainUIManager>
 
     public TransistionUI[] transistionInterfaces;
 
+    [Header("Top Right Panel")]
+    [SerializeField] private TextMeshProUGUI availableMoney = null;
+    [SerializeField] private TextMeshProUGUI moneyGoal = null;
+    [SerializeField] private TextMeshProUGUI day = null;
+    [SerializeField] private TextMeshProUGUI weekMonth = null;
+
     private Action onCompleteFunction;
     private bool isUIShown;
     private TransistionUI shopTransisition = null;
-
-    public TextMeshProUGUI availableMoney;
-    public TextMeshProUGUI moneyGoal;
-    public TextMeshProUGUI day;
-    public TextMeshProUGUI weekMonth;
 
     public void StartSequence(Action onComplete, bool showUI = true) {
         onCompleteFunction = onComplete;
@@ -43,31 +41,31 @@ public class MainUIManager : Singleton<MainUIManager>
         weekMonth.text = GameManager.store.GetWeekMonth();
     }
 
-    private IEnumerator StartShowSequence() {
+    private IEnumerator StartShowSequence(float speed = 0.5f) {
         if (isUIShown) yield break;
         isUIShown = true;
 
         for (int i = 0; i < transistionInterfaces.Length; i++) {
             transistionInterfaces[i].Show();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(speed);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(speed);
         
         onCompleteFunction?.Invoke();
         yield break;
     }
 
-    private IEnumerator StartHideSequence() {
+    private IEnumerator StartHideSequence(float speed = 0.2f) {
         if (!isUIShown) yield break;
         isUIShown = false;
 
         for (int i = transistionInterfaces.Length - 1; i >= 0; i--) {
             transistionInterfaces[i].Hide();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(speed);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(speed);
 
         onCompleteFunction?.Invoke();
         yield break;

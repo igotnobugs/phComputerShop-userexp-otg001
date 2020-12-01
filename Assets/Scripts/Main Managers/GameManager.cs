@@ -75,36 +75,70 @@ public class GameManager : Singleton<GameManager>
         introDialogue.TriggerDialogue(() => isIntroDone = true);
         yield return new WaitUntil(() => isIntroDone);
 
+        bool isPopUpDone = false;
+        Vector2 uiPosition = mainUIManager.management.transform.position;
+        Vector2 pivotPosition = new Vector2(0, 0);
+        PopUp tutorialPopUp = null;
+
+        //Camera Control Popup
+        isPopUpDone = false;
+        uiPosition = new Vector2(250, 150);
+        pivotPosition = new Vector2(0.5f, 0.5f);
+        tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Camera Controls", "Drag the camera around by holding the Middle Mouse button." +
+            "\nPress Space to return to the center." +
+            "\nClose the Pop Up to advance.");
+        tutorialPopUp.SetListener(mainUIManager.clipboard.GetComponent<ActiveUI>());
+        tutorialPopUp.SetOnComplete(() => isPopUpDone = true);
+        yield return new WaitUntil(() => isPopUpDone);
+
+        // Sequence
         bool isSequenceDone = false;
         mainUIManager.StartSequence(() => isSequenceDone = true);
         yield return new WaitUntil(() => isSequenceDone);
 
+        //Management Popup
+        isPopUpDone = false;
+        uiPosition = mainUIManager.management.transform.position;
+        pivotPosition = new Vector2(0, 0);
+        tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Management", "This allows you to change prices, staff and the shop.");
+        tutorialPopUp.SetListener(mainUIManager.management.GetComponent<ActiveUI>());
+        tutorialPopUp.SetOnComplete(() => isPopUpDone = true);      
+        yield return new WaitUntil(() => isPopUpDone);
+
         //Ledger Popup
-        bool isLedgerPopUpDone = false;
-        PopUp ledgerPopup = popUpManager.CreatePopUp(mainUIManager.ledger.transform.position);
-        ledgerPopup.Init("Ledger", "Contains all the past and future transactions");
-        ledgerPopup.SetListener(mainUIManager.ledger.GetComponent<ActiveUI>());
-        ledgerPopup.SetOnComplete(() => isLedgerPopUpDone = true);
-        yield return new WaitUntil(() => isLedgerPopUpDone);
+        isPopUpDone = false;
+        uiPosition = mainUIManager.ledger.transform.position + new Vector3(50, 0, 0);
+        pivotPosition = new Vector2(0, 0);
+        tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Ledger", "Contains all the previous transactions.");
+        tutorialPopUp.SetListener(mainUIManager.ledger.GetComponent<ActiveUI>());
+        tutorialPopUp.SetOnComplete(() => isPopUpDone = true);
+        yield return new WaitUntil(() => isPopUpDone);
 
         //Shop Popup
-        bool isShopPopUpDone = false;
-        PopUp shopPopup = popUpManager.CreatePopUp(mainUIManager.shop.transform.position + new Vector3(100, 0, 0));
-        shopPopup.Init("Shop", "Lets you to buy items. It disappears when the you start opening.");
-        shopPopup.SetListener(mainUIManager.shop.GetComponent<ActiveUI>());
-        shopPopup.SetOnComplete(() => isShopPopUpDone = true);
-        yield return new WaitUntil(() => isShopPopUpDone);
+        isPopUpDone = false;
+        uiPosition = mainUIManager.shop.transform.position + new Vector3(100, 0, 0);
+        pivotPosition = new Vector2(0, 0);
+        tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Shop", "Lets you to buy items.\nIt disappears when the you start opening and will not be available until the next day.");
+        tutorialPopUp.SetListener(mainUIManager.shop.GetComponent<ActiveUI>());
+        tutorialPopUp.SetOnComplete(() => isPopUpDone = true);
+        yield return new WaitUntil(() => isPopUpDone);
 
         //Clipboard Popup
-        bool isClipboardDone = false;
-        PopUp clipboardPopup = popUpManager.CreatePopUp(mainUIManager.clipboard.transform.position + new Vector3(-250, 0, 0));
-        clipboardPopup.Init("Clipboard", "Shows the attributes of a selected staff.");
-        clipboardPopup.SetListener(mainUIManager.clipboard.GetComponent<ActiveUI>());
-        clipboardPopup.SetOnComplete(() => isClipboardDone = true);
-        yield return new WaitUntil(() => isClipboardDone);
+        isPopUpDone = false;
+        uiPosition = mainUIManager.clipboard.transform.position;
+        pivotPosition = new Vector2(1, 0);
+        tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Clipboard", "Shows the attributes of a selected staff.");
+        tutorialPopUp.SetListener(mainUIManager.clipboard.GetComponent<ActiveUI>());
+        tutorialPopUp.SetOnComplete(() => isPopUpDone = true);
+        yield return new WaitUntil(() => isPopUpDone);
 
         //Set up the game
-        StartEarlyMorning();
+        StartEarlyMorning();        
         yield break;
     }
 
@@ -139,10 +173,16 @@ public class GameManager : Singleton<GameManager>
     // Setting Up Phase, Can only advance when the button is clicked
     public void SetUpPhase() {
         Phase = GamePhase.SettingUp;
-
-        
-
+      
         openShopButton.Show();
+
+        //Start Popup Popup
+        Vector2 uiPosition = mainUIManager.clipboard.transform.position + new Vector3(0, 20);
+        Vector2 pivotPosition = new Vector2(1, 0);
+        PopUp tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
+        tutorialPopUp.Init("Start", "Before you open the shop, make sure the counter is manned by clicking one of your staffs and Right-Click the Counter then choose Interact.");
+        tutorialPopUp.SetListener(openShopButton.GetComponent<TransistionUI>(), true);
+        tutorialPopUp.SetOnComplete(() => Destroy(tutorialPopUp));
     }
 
     // When store is open, called by the button

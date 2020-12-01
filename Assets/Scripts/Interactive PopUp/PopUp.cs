@@ -19,14 +19,12 @@ public class PopUp : MonoBehaviour
 
     private Canvas canvas;
     private RectTransform rectTransform;
-    private RectTransform canvasRect;
     private BaseUI targetUI;
     private Action onCompleteFunc; 
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        canvasRect = canvas.GetComponent<RectTransform>();
     }
 
     private void Start() {
@@ -41,13 +39,18 @@ public class PopUp : MonoBehaviour
         popUpText.text = content;       
     }
 
-    public void MoveTo(Vector2 worldPos) {
-        rectTransform.position = worldPos;
+    public void MoveTo(Vector2 pivot, Vector2 anchorPosition) {
+        rectTransform.position = anchorPosition;
+        rectTransform.pivot = pivot;
     }
 
-    public void SetListener(BaseUI ui) {
+    public void SetListener(BaseUI ui, bool opposite = false) {
         targetUI = ui;
-        targetUI.OnActivating += DestroyPopup;
+        if (!opposite) {
+            targetUI.OnActivating += DestroyPopup;
+        } else {
+            targetUI.OnDeactivating += DestroyPopup;
+        }
     }
 
     public void SetOnComplete(Action function) {
@@ -57,6 +60,7 @@ public class PopUp : MonoBehaviour
     public void DestroyPopup() {
         onCompleteFunc?.Invoke();
         targetUI.OnActivating -= DestroyPopup;
+        targetUI.OnDeactivating -= DestroyPopup;
         Destroy(gameObject);
     }
 }

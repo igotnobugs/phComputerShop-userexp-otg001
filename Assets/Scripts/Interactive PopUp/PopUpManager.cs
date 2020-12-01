@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /* WIP
  * 
@@ -13,9 +14,9 @@ public class PopUpManager : MonoBehaviour
 
     public Canvas gameUI;
 
-    public PopUp CreatePopUp(Vector2 location) {
+    public PopUp CreatePopUp(Vector2 pivot, Vector2 anchorPosition) {
         PopUp newPopup = Instantiate(popUpPrefab, gameUI.transform);
-        newPopup.MoveTo(location);
+        newPopup.MoveTo(pivot, anchorPosition);
         return newPopup;
     }
 }
