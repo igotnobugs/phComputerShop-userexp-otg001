@@ -20,15 +20,18 @@ public class PopUp : MonoBehaviour
     private Canvas canvas;
     private RectTransform rectTransform;
     private BaseUI targetUI;
-    private Action onCompleteFunc; 
+    private Action onCompleteFunc;
+    public AudioManager audioManager;
 
     private void Awake() {
+        audioManager = FindObjectOfType<AudioManager>();
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
     }
 
     private void Start() {
         closeButton.onClick.AddListener(() => {
+            PlayButtonAudio();
             DestroyPopup();
         });
     }
@@ -62,5 +65,14 @@ public class PopUp : MonoBehaviour
         targetUI.OnActivating -= DestroyPopup;
         targetUI.OnDeactivating -= DestroyPopup;
         Destroy(gameObject);
+    }
+
+    public void PlayButtonAudio() {
+        if (audioManager != null)
+        {
+            audioManager.Play("ButtonClick");
+        }
+        else
+            Debug.LogError("No Audio Manager found for PopUp");
     }
 }

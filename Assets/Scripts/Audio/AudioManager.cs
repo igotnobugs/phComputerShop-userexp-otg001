@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        Play("Test");
+        //Play("SHopOpen");
         //Stop("Test");
     }
 
