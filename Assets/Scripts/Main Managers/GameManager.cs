@@ -122,7 +122,7 @@ public class GameManager : Singleton<GameManager>
         uiPosition = mainUIManager.shop.transform.position + new Vector3(100, 0, 0);
         pivotPosition = new Vector2(0, 0);
         tutorialPopUp = popUpManager.CreatePopUp(pivotPosition, uiPosition);
-        tutorialPopUp.Init("Shop", "Lets you to buy items.\nIt disappears when the you start opening and will not be available until the next day.");
+        tutorialPopUp.Init("Store", "Lets you buy furnitures and upgrades.\nIt disappears when you start opening and will not be available until the next day.");
         tutorialPopUp.SetListener(mainUIManager.shop.GetComponent<ActiveUI>());
         tutorialPopUp.SetOnComplete(() => isPopUpDone = true);
         yield return new WaitUntil(() => isPopUpDone);
@@ -148,7 +148,7 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < staffs.Length; i++) {
             staffPanel.CreateStaffButton(staffs[i]);
-            //staffs[i].EnableSelection();
+            staffs[i].EnableSelection();
         }
 
         new Timer().StartTimer(gameObject, 1.0f).setOnComplete(() => SetUpPhase());

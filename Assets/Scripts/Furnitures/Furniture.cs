@@ -64,11 +64,11 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
     }
 
     public virtual void EnableSelection() {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public virtual void DisableSelection() {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public virtual void OnPointerEnter(PointerEventData eventData) {

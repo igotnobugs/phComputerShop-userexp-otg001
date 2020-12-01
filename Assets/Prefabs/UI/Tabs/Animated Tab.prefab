@@ -279,6 +279,9 @@ MonoBehaviour:
   activeTweenType: 21
   unactiveTweenType: 21
   deactivateButton: {fileID: 9070688296535223076}
+  allowSounds: 1
+  activatingSound: TabSlidingOut
+  deactivatingSound: TabSlidingIn
 --- !u!114 &6843547079189353878
 MonoBehaviour:
   m_ObjectHideFlags: 0

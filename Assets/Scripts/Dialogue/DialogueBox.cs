@@ -22,6 +22,8 @@ public class DialogueBox : MonoBehaviour, IPointerClickHandler
     private bool isTypingDone = false;
     private Action nextAction;
 
+    private AudioManager audioManager;
+
     private void Awake() {
         if (nameText == null || sentenceText == null) {
             Debug.Log("Assign the text fields in Dialogue Panel");
@@ -35,6 +37,7 @@ public class DialogueBox : MonoBehaviour, IPointerClickHandler
     private void Start() {
         typingCoroutine = TypeSentence();
         nextButton.gameObject.SetActive(false);
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     public void NextButtonOnClick(Action onClick) {
@@ -70,6 +73,7 @@ public class DialogueBox : MonoBehaviour, IPointerClickHandler
     }
 
     public virtual void OnPointerClick(PointerEventData eventData) {
+        audioManager.Play("ButtonClick");
         if (!isTypingDone) {
             StopCoroutine(typingCoroutine);
             isTypingDone = true;

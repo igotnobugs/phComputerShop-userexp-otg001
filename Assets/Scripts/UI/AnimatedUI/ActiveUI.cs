@@ -18,13 +18,30 @@ public class ActiveUI : BaseUI, IPointerClickHandler
     [SerializeField] protected LeanTweenType activeTweenType;
     [SerializeField] protected LeanTweenType unactiveTweenType;
     [SerializeField] protected GameObject deactivateButton;
-
+ 
     public bool IsActive { get; protected set; }
+
+    private AudioManager audioManager;
+
+    [Header("Sounds")]
+    [SerializeField] protected bool allowSounds = false;
+    [SerializeField] protected string activatingSound = "";
+    [SerializeField] protected string deactivatingSound = "";
+
+    protected override void Start() {
+        base.Start();
+        audioManager = FindObjectOfType<AudioManager>();
+        if (audioManager == null) allowSounds = false;
+    }
 
     public LTDescr Active(Action onCompleteFunc = null) {
         gameObject.SetActive(true);
         InvokeActivatingEvent();
         IsActive = true;
+
+        if (allowSounds && activatingSound != "") {
+            audioManager.Play(activatingSound);
+        }
 
         TweenID = LeanTween.move(rect, activePosition, tweenDuration);
         TweenID.setEase(activeTweenType);
@@ -39,6 +56,10 @@ public class ActiveUI : BaseUI, IPointerClickHandler
     public LTDescr Deactive(Action onCompleteFunc = null) {
         InvokeDeactivatingEvent();
         IsActive = false;
+
+        if (allowSounds && deactivatingSound != "") {
+            audioManager.Play(deactivatingSound);
+        }
 
         TweenID = LeanTween.move(rect, unactivePosition, tweenDuration);
         TweenID.setEase(unactiveTweenType);

@@ -78,14 +78,20 @@ public class StoreData
     public void AdvanceDay() {
         earnings = 0;
 
-        if ((int)day >= 6) { day = 0;}
+        if ((int)day >= 6) {
+            day = 0;
+            week++;
+        }
         else {day++;}
 
-        if (week >= 4) { week = 1; }
-        else { week++; }
+        if (week > 4) {
+            week = 1;
+            month++;
+        }
 
-        if (month >= 12) { month = 1; }
-        else { month++; }
+        if (month > 12) {
+            month = 1;
+        }
     }
 
     public void AddMoney(int amount) {

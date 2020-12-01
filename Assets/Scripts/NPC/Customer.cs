@@ -19,9 +19,14 @@ public class Customer : NPC
     protected Computer computerToUse;
     public List<Customer> costumerList;
 
+    private AudioManager audioManager;
+
     private void Start() {
+        audioManager = FindObjectOfType<AudioManager>();
+
         //Find a counter
         counter = FindObjectOfType<Counter>();
+
 
         // Go to counter
         if (counter != null) {
@@ -38,9 +43,11 @@ public class Customer : NPC
         //Do stuff maybe some effects?
 
         yield return new WaitUntil(() => counter.isOccupied);
-
+      
         yield return new WaitForSeconds(timeAtCounter);
+
         // PAY
+        audioManager.Play("CashRegister");
         GameManager.store.AddMoney(amountToPay);
 
         GoToComputer();

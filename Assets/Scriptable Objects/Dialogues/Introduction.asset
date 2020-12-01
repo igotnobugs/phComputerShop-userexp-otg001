@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scripts:
   - name: Dead Relative
-    sentence: Hello _______, if you are reading this, I am probably gone from this
+    sentence: Hello my child, if you are reading this, I am probably gone from this
       world...
   - name: Dead Relative
     sentence: I entrust my shop to you, my closest living relative.
   - name: Dead Relative
     sentence: I hope you will find success, through my shop under your management.
   - name: Dead Relative
-    sentence: I wish you good luck and hope you may succed agaisnt the challanges
+    sentence: I wish you good luck and hope you may succeed against the challenges
       about to come.

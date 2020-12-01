@@ -19,11 +19,13 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
     private bool allowSelection = false;
 
     public GameObject energyCounter;
-   
+
+    private AudioManager audioManager;
 
     protected override void Awake() {
         base.Awake();
         mouseInput = new MouseInput();       
+
     }
 
     private void OnDisable() {
@@ -33,6 +35,7 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
     private void Start() {
         mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
         mouseInput.Disable();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void MouseLeftClick() {
@@ -56,6 +59,7 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
         mat.SetInt("_AnimateOutline", 0);
         mat.SetFloat("_OutlineThickness", 2.0f);
         mouseInput.Enable();
+        audioManager.Play("CharacterSelect");
     }
 
     public void Unselected() {

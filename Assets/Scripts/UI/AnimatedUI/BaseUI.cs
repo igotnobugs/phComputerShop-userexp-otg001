@@ -17,6 +17,10 @@ public class BaseUI : MonoBehaviour
     public event UIEvent OnActivated;
     public event UIEvent OnDeactivated;
 
+    protected virtual void Start() {
+
+    }
+
     protected virtual void InvokeActivatingEvent() {
         OnActivating?.Invoke();
     }

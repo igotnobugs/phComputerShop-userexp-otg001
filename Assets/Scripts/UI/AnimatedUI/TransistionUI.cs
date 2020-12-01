@@ -17,7 +17,7 @@ public class TransistionUI : BaseUI
     public LTDescr TweenID { get; protected set; }
     public bool IsActive { get; protected set; }
 
-    protected virtual void Start() {
+    protected override void Start() {
         if (startShowed) {
             rect.anchoredPosition = showPosition;
         }
