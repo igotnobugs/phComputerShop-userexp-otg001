@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,6 +10,9 @@ public class AStarMovement : MonoBehaviour
 {
     public float moveSpeed = 5.0f;
     public float closeEnough = 0.001f;
+
+    public Action onCompletePath;
+
 
     private Pathfinding2D pathfinding;
 
@@ -34,12 +38,16 @@ public class AStarMovement : MonoBehaviour
         } else {
             //Debug.Log("Path done!");
             pathfinding.myPath = null;
+            onCompletePath?.Invoke();
         }
     }
 
-    public bool AttemptFindPath(Vector3 destination) {  
+    public bool AttemptFindPath(Vector3 destination, Action onCompleteFunc = null) {  
         if (pathfinding.FindPath(transform.position, destination)) {
             //Debug.Log("Path found at " + destination);
+            if (onCompleteFunc != null) {
+                onCompletePath = onCompleteFunc;
+            }
             return true;
         }
         //Debug.Log("Path not found at " + destination);

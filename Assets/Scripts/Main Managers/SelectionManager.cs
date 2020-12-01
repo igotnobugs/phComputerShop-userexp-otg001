@@ -9,8 +9,8 @@ using UnityEngine;
 public class SelectionManager : Singleton<SelectionManager>
 {
     public static bool enableSelection = true;
-    public static GameObject HoveredObject { get; private set; } = null;
-    public static GameObject SelectedObject { get; private set; } = null;
+    public static GameObject HoveredObject { get; set; } = null;
+    public static GameObject SelectedObject { get; set; } = null;
 
     private MouseInput mouseInput;
 
@@ -36,28 +36,6 @@ public class SelectionManager : Singleton<SelectionManager>
 
     private void TrackSelection() {
         if (!enableSelection) return;
-
-        RaycastHit2D hit = Physics2D.Raycast(GridCursor.MousePositionWorld, Vector2.zero);
-
-        if (hit.collider != null) {
-            GameObject hitObject = hit.collider.gameObject;
-            ISelectable hitSelectable = hitObject.GetComponent<ISelectable>();
-            if (hitSelectable != null) {
-                //if hit is not the same as recently hovered
-                if (HoveredObject != hitObject) {
-                    //Debug.Log("Hovered: " + hitObject.name);
-                    HoveredObject = hitObject;
-                    hitSelectable.Hovered();
-                }
-            }
-        }
-        else {
-            // If something was hovered and remove it
-            if (HoveredObject != null) {
-                HoveredObject.GetComponent<ISelectable>().Unhovered();
-                HoveredObject = null;
-            }          
-        }
     }
 
 

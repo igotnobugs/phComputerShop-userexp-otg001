@@ -4,7 +4,8 @@ using UnityEngine;
 
 /* RUSHED
  * WIP, CLEAN UP
- * 
+ * Middle mouse click drag
+ * Space bar return to center
  */
 
 
@@ -15,7 +16,8 @@ public class CameraControl : MonoBehaviour
     public Vector2 clampPosition = new Vector2(10.0f, 10.0f);
 
     private Camera mainCamera;
-    private MouseInput mouseInput;      
+    private MouseInput mouseInput;
+    private KeyboardInput keyboardInput;
 
     private bool startDragging = false;
     private Vector2 mouseStartPosition;
@@ -24,21 +26,25 @@ public class CameraControl : MonoBehaviour
 
     private void Awake() {
         mouseInput = new MouseInput();
+        keyboardInput = new KeyboardInput();
         mainCamera = GetComponent<Camera>();
     }
 
     private void OnEnable() {
         mouseInput.Enable();
+        keyboardInput.Enable();
     }
 
     private void OnDisable() {
         mouseInput.Disable();
+        keyboardInput.Disable();
     }
 
     private void Start() {
         targetPosition = mainCamera.transform.position;
         mouseInput.Mouse.MouseMiddleClick.performed += _ => GetStartingPosition();
         mouseInput.Mouse.MouseMiddleRelease.performed += _ => MouseMiddleReleased();
+        keyboardInput.Keyboard.SpaceBar.performed += _ => ReturnToCenterPosition();
     }
 
     private void Update() {
@@ -64,6 +70,10 @@ public class CameraControl : MonoBehaviour
         startDragging = true;
     }
 
+    private void ReturnToCenterPosition() {
+        targetPosition = new Vector3(0, 0, -10);
+    }
+
     private void MouseMiddleReleased() {
         startDragging = false;
     }
@@ -71,6 +81,8 @@ public class CameraControl : MonoBehaviour
     public void OnDestroy() {   
         mouseInput.Mouse.MouseMiddleClick.performed -= _ => GetStartingPosition();
         mouseInput.Mouse.MouseMiddleRelease.performed -= _ => MouseMiddleReleased();
+        keyboardInput.Keyboard.SpaceBar.performed -= _ => ReturnToCenterPosition();
+        keyboardInput.Disable();
         mouseInput.Disable();
     }
 }

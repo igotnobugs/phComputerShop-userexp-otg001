@@ -14,9 +14,10 @@ public class Interact : MonoBehaviour, IContextButton
     }
 
     public void Enable() {
-        if (SelectionManager.SelectedObject != null) {
-            if (SelectionManager.SelectedObject.tag == "Staff" && 
-                SelectionManager.HoveredObject.tag == "Furniture") {
+        if (SelectionManager.SelectedObject == null) return;
+
+        if (SelectionManager.SelectedObject.TryGetComponent(out Staff staff)) { 
+            if (SelectionManager.HoveredObject.tag == "Furniture") {
                 gameObject.SetActive(true);
 
                 contextObject = SelectionManager.HoveredObject.GetComponent<Furniture>();
@@ -27,9 +28,10 @@ public class Interact : MonoBehaviour, IContextButton
     }
 
     public void OnClick() {       
-        Staff staff = SelectionManager.SelectedObject.GetComponent<Staff>();
-        staff.MoveToGrid(contextObject.interactDestination);
 
+        if (SelectionManager.SelectedObject.TryGetComponent(out NPC npc)) {
+            contextObject.Interact(npc);
+        }
         contextManager.DisableContextMenu();
     }
 }
