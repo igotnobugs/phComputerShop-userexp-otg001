@@ -27,7 +27,7 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
         Vector3 interactDestination = GridCursor.WorldToGrid(interactTransform.position);
         interactor.MoveToGrid(interactDestination, () => {
             onComplete?.Invoke();
-            Interacted();          
+            Interacted(interactor);          
             });
     }
 
@@ -83,7 +83,7 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
         Unhovered();
     }
 
-    protected virtual void Interacted() {
+    protected virtual void Interacted(NPC npc = null) {
         
     }
 

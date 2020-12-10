@@ -43,7 +43,11 @@ public class Customer : NPC
         //Do stuff maybe some effects?
 
         yield return new WaitUntil(() => counter.isOccupied);
-      
+
+        //Less social increases time at Counter
+        float timeModified = 100.0f / counter.mannedByWho.attributes.social;
+        timeAtCounter *= timeModified;
+        Debug.Log(timeAtCounter);
         yield return new WaitForSeconds(timeAtCounter);
 
         // PAY

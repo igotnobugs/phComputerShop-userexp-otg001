@@ -10,4 +10,8 @@ public class StaffObject : ScriptableObject
     public string initials;
 
     public Sprite portrait;
+
+    public int energy;
+    public int social;
+    public int technical;
 }

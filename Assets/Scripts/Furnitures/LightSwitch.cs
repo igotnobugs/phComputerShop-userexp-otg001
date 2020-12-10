@@ -12,7 +12,7 @@ public class LightSwitch : Furniture
     // The hovered furniture
     private GameObject contextObject;
 
-    protected override void Interacted() {
+    protected override void Interacted(NPC npc = null) {
         Debug.Log("Light switch interacted");
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Counter : Furniture 
 {
     public Transform lineTransfrom; //Where customers go
+    public Staff mannedByWho;
 
     public virtual void InteractAsCustomer(NPC interactor, Action onComplete = null) {
         Vector3 interactDestination = GridCursor.WorldToGrid(lineTransfrom.position);
@@ -15,7 +16,10 @@ public class Counter : Furniture
         });
     }
 
-    protected override void Interacted() {
+    protected override void Interacted(NPC npc = null) {
+        if (npc != null && npc as Staff) {
+            mannedByWho = npc as Staff;
+        }
         isOccupied = true;
     }
 

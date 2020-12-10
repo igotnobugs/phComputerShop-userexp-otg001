@@ -270,8 +270,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door: {fileID: 0}
   amountToPay: 20
-  timeAtCounter: 1
+  timeAtCounter: 2
   timeToUse: 5
+  costumerList: []
 --- !u!1 &4021730394343988177
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02de3489ead40c44c98ba683be835459, type: 3}
-  m_Name: Staff 2
+  m_Name: Mark
   m_EditorClassIdentifier: 
-  fullname: FullName 2
-  nickname: Nick 2
-  initials: SF2
+  fullname: Mark Markadez
+  nickname: Mark
+  initials: Mk
   portrait: {fileID: -7777177641172106769, guid: 774ef89bb9793ad4e8e0ad142e2e4571, type: 3}
+  energy: 100
+  social: 40
+  technical: 100
