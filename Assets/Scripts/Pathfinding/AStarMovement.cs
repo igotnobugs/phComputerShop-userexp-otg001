@@ -10,6 +10,7 @@ public class AStarMovement : MonoBehaviour
 {
     public float moveSpeed = 5.0f;
     public float closeEnough = 0.001f;
+    public Animator animator;
 
     public Action onCompletePath;
 
@@ -21,11 +22,29 @@ public class AStarMovement : MonoBehaviour
     }
 
     private void LateUpdate() {
-        if (pathfinding.myPath == null) return;
+        if (pathfinding.myPath == null)
+        {
+            if (animator != null)
+            {
+                animator.SetFloat("Speed", 0);
+                animator.SetBool("WalkingUp", false);
+            }    
+            return;
+        }
 
         if (pathfinding.myPath.Count > 0) {
             Vector3 currentNode = pathfinding.myPath[0].worldPosition;
             if (Vector3.Distance(transform.position, currentNode) > closeEnough) {
+
+                if (animator != null) {
+                    if (transform.position.y < currentNode.y)
+                        animator.SetBool("WalkingUp", true);
+                    else if(transform.position.y > currentNode.y) 
+                        animator.SetBool("WalkingUp", false);
+
+                    animator.SetFloat("Speed", moveSpeed);
+                }
+
                 // Move towards node
                 transform.position = Vector3.MoveTowards(transform.position,
                                                          currentNode,

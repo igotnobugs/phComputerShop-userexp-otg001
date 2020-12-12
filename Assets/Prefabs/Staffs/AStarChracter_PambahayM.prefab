@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -7777177641172106769, guid: 774ef89bb9793ad4e8e0ad142e2e4571, type: 3}
+  m_Sprite: {fileID: -5780711742900014350, guid: 95366cf3979e360499ffeaffc8c478ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -178,7 +178,7 @@ Animator:
   m_GameObject: {fileID: 84423623321075950}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9d50985660a0c0b41bb9ec0f377d0b9f, type: 2}
+  m_Controller: {fileID: 9100000, guid: d34a74fd89d44984ab13ea4dd74332cf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: -8526731268043958189}
   - component: {fileID: 7014435925993290920}
   m_Layer: 0
-  m_Name: AStarChracter
+  m_Name: AStarChracter_PambahayM
   m_TagString: Staff
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
