@@ -22,7 +22,7 @@ public class DialogueBox : MonoBehaviour, IPointerClickHandler
     private bool isTypingDone = false;
     private Action nextAction;
 
-    private AudioManager audioManager;
+    private SceneAudioManager audioManager;
 
     private void Awake() {
         if (nameText == null || sentenceText == null) {
@@ -37,7 +37,7 @@ public class DialogueBox : MonoBehaviour, IPointerClickHandler
     private void Start() {
         typingCoroutine = TypeSentence();
         nextButton.gameObject.SetActive(false);
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = FindObjectOfType<SceneAudioManager>();
     }
 
     public void NextButtonOnClick(Action onClick) {

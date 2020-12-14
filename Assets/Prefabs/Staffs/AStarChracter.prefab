@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: -2249127803052946206}
   - component: {fileID: -8526731268043958189}
   - component: {fileID: 7014435925993290920}
+  - component: {fileID: 1835499308388410858}
   m_Layer: 0
   m_Name: AStarChracter
   m_TagString: Staff
@@ -280,6 +281,7 @@ MonoBehaviour:
   moveSpeed: 5
   closeEnough: 0.001
   animator: {fileID: 1835124912}
+  personalAudio: {fileID: 0}
 --- !u!114 &7014435925993290920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +297,33 @@ MonoBehaviour:
   attributes: {fileID: 11400000, guid: ee7f25b3334cd854697f8d6f920b8c94, type: 2}
   mannedFurniture: {fileID: 0}
   energyCounter: {fileID: 65871965721790370}
+--- !u!114 &1835499308388410858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84423624746715319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f266c336c306d4181e4189958678da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Walking
+    clip: {fileID: 8300000, guid: cb520a3170fc7f84488516ae2c15e6d5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Typing
+    clip: {fileID: 8300000, guid: b86c7f234c70f6849b3d914d10a486ea, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
 --- !u!1 &498754278434725597
 GameObject:
   m_ObjectHideFlags: 0

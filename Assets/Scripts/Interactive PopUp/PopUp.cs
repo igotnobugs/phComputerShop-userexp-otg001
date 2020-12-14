@@ -21,10 +21,10 @@ public class PopUp : MonoBehaviour
     private RectTransform rectTransform;
     private BaseUI targetUI;
     private Action onCompleteFunc;
-    public AudioManager audioManager;
+    public SceneAudioManager audioManager;
 
     private void Awake() {
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = FindObjectOfType<SceneAudioManager>();
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
     }

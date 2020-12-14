@@ -30,6 +30,9 @@ public class GameManager : Singleton<GameManager>
     public StoreData storeData;
     public static StoreData store;
 
+    [Header("Scene Audio Manager")]
+    public SceneAudioManager sceneAudio;
+
     [Header("Testing")]
     public bool showTutorial = true;
     public Transform door;
@@ -46,6 +49,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void StartTutorial(Action onEnd) {
+        sceneAudio.Play("NightAmbience");
         StartCoroutine(NewGameSequence(onEnd));
     }
 
@@ -124,6 +128,9 @@ public class GameManager : Singleton<GameManager>
 
     // When store is open, called by the button
     public void OpenStore() {
+        sceneAudio.Stop("NightAmbience");
+        sceneAudio.Play("DayAmbience");
+        sceneAudio.Play("ShopAmbience");
         stateMachine.SetTrigger("openShopClicked");
     }
 
@@ -133,6 +140,9 @@ public class GameManager : Singleton<GameManager>
 
     // Do a sequence of closing work here
     private IEnumerator ClosingSequence(Action onEnd) {
+        sceneAudio.Stop("ShopAmbience");
+        sceneAudio.Stop("DayAmbience");
+        sceneAudio.Play("NightAmbience");
         mainUIManager.StartSequence(null, false);
 
         // Mostly just money deductions and stuff

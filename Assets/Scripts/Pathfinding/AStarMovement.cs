@@ -11,6 +11,7 @@ public class AStarMovement : MonoBehaviour
     public float moveSpeed = 5.0f;
     public float closeEnough = 0.001f;
     public Animator animator;
+    public AudioManager personalAudio;
 
     public Action onCompletePath;
 
@@ -19,11 +20,15 @@ public class AStarMovement : MonoBehaviour
 
     private void Awake() {
         pathfinding = GetComponent<Pathfinding2D>();
+        personalAudio = GetComponent<PersonalAudio>();
     }
 
     private void LateUpdate() {
         if (pathfinding.myPath == null)
         {
+            if (personalAudio.GetAudioSource("Walking").isPlaying)
+                personalAudio.Stop("Walking");
+
             if (animator != null)
             {
                 animator.SetFloat("Speed", 0);
@@ -35,6 +40,8 @@ public class AStarMovement : MonoBehaviour
         if (pathfinding.myPath.Count > 0) {
             Vector3 currentNode = pathfinding.myPath[0].worldPosition;
             if (Vector3.Distance(transform.position, currentNode) > closeEnough) {
+                if (!personalAudio.GetAudioSource("Walking").isPlaying)
+                    personalAudio.Play("Walking");
 
                 if (animator != null) {
                     if (transform.position.y < currentNode.y)

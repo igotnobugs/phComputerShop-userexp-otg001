@@ -20,7 +20,7 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
 
     public GameObject energyCounter;
 
-    private AudioManager audioManager;
+    private SceneAudioManager audioManager;
 
     protected override void Awake() {
         base.Awake();
@@ -35,7 +35,7 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
     private void Start() {
         mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
         mouseInput.Disable();
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = FindObjectOfType<SceneAudioManager>();
     }
 
     private void MouseLeftClick() {

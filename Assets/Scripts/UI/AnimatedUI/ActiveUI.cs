@@ -21,7 +21,7 @@ public class ActiveUI : BaseUI, IPointerClickHandler
  
     public bool IsActive { get; protected set; }
 
-    private AudioManager audioManager;
+    private SceneAudioManager audioManager;
 
     [Header("Sounds")]
     [SerializeField] protected bool allowSounds = false;
@@ -30,7 +30,7 @@ public class ActiveUI : BaseUI, IPointerClickHandler
 
     protected override void Start() {
         base.Start();
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = FindObjectOfType<SceneAudioManager>();
         if (audioManager == null) allowSounds = false;
     }
 

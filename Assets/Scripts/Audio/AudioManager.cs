@@ -9,13 +9,13 @@ public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
 
-    public static AudioManager instance;
+    public static SceneAudioManager instance;
 
-    void Awake ()
+    void Awake()
     {
         //If you want to carry this manager across scenes:
         //(Must be a root GameObject)
-        
+
         //if (instance == null)
         //    instance = this;
         //else
@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            s.source.playOnAwake = s.playOnAwake;
         }
     }
 
@@ -61,5 +62,15 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound: '" + name + "' not found!");
         }
         s.source.Stop();
+    }
+
+    public AudioSource GetAudioSource(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: '" + name + "' not found!");
+        }
+        return s.source;
     }
 }

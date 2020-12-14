@@ -19,10 +19,12 @@ public class Customer : NPC
     protected Computer computerToUse;
     public List<Customer> costumerList;
 
-    private AudioManager audioManager;
+    private SceneAudioManager sceneAudioManager;
+    private PersonalAudio personalAudio;
 
     private void Start() {
-        audioManager = FindObjectOfType<AudioManager>();
+        sceneAudioManager = FindObjectOfType<SceneAudioManager>();
+        personalAudio = GetComponent<PersonalAudio>();
 
         //Find a counter
         counter = FindObjectOfType<Counter>();
@@ -51,7 +53,7 @@ public class Customer : NPC
         yield return new WaitForSeconds(timeAtCounter);
 
         // PAY
-        audioManager.Play("CashRegister");
+        sceneAudioManager.Play("CashRegister");
         GameManager.store.AddMoney(amountToPay);
 
         GoToComputer();
@@ -83,7 +85,6 @@ public class Customer : NPC
 
     private IEnumerator InteractingComputer() {
         //Do stuff
-
         yield return new WaitForSeconds(timeToUse);
 
         Debug.Log("Customer done!");
