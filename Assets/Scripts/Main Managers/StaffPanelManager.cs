@@ -11,18 +11,26 @@ public class StaffPanelManager : Singleton<StaffPanelManager>
     public Transform staffPanel = null;
     public Button staffButtonPrefab = null;
 
-    public List<StaffButton> staffButtons = new List<StaffButton>();
+    private static Transform staffPanelToUse;
+    private static Button staffButtonPrefabToUse;
+    private static List<StaffButton> staffButtons = new List<StaffButton>();
 
     private void Awake() {
-        if (staffPanel == null)
+        if (staffPanel == null) {
             Debug.Log("Staff Panel is not assigned.");
+        } else {
+            staffPanelToUse = staffPanel;
+        }
 
-        if (staffButtonPrefab == null)
-            Debug.Log("staff Button Prefab is not assigned.");    
+        if (staffButtonPrefab == null) {
+            Debug.Log("staff Button Prefab is not assigned.");
+        } else {
+            staffButtonPrefabToUse = staffButtonPrefab;
+        }
     }
 
-    public void CreateStaffButton(Staff staff) {
-        Button newButton = Instantiate(staffButtonPrefab, staffPanel);
+    public static void CreateStaffButton(Staff staff) {
+        Button newButton = Instantiate(staffButtonPrefabToUse, staffPanelToUse);
         StaffButton newStaffButton = newButton.GetComponent<StaffButton>();
 
         if (newStaffButton != null && staff.attributes != null) {
@@ -31,7 +39,7 @@ public class StaffPanelManager : Singleton<StaffPanelManager>
         }
         else {
             if (newStaffButton != null)
-                Debug.Log(staffButtonPrefab + " has no StaffButton component.");
+                Debug.Log(staffButtonPrefabToUse + " has no StaffButton component.");
 
             if (staff.attributes != null)
                 Debug.Log(staff + " has no Data.");

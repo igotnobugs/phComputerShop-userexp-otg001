@@ -4,35 +4,32 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-/* For interactable furnitures
- * Set the position where the interactor have to go to
- * 
- * WIP - Must check when the interactor has reached the destination
- */
-
 public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPointerExitHandler  
 {
-    public Transform interactTransform; //Staff usually goes here
+    [Header("Furniture Settings")]
+    public Transform interactTransform; 
     protected Material mat;
     protected bool isSelected = false;
-
+    public bool allowBrokenAfterUse = false;
     public bool isOccupied = false;
+    public NPC user;
+    public bool isBroken = false;
+
+    [Header("Outline Settings")]
+    public Color SelectedColor;
+    public Color OccupiedColor;
 
     protected virtual void Awake() {
         mat = GetComponentInChildren<SpriteRenderer>().material;
     }
 
-
-    public virtual void Interact(NPC interactor, Action onComplete = null) {
-        Vector3 interactDestination = GridCursor.WorldToGrid(interactTransform.position);
-        interactor.MoveToGrid(interactDestination, () => {
-            onComplete?.Invoke();
-            Interacted(interactor);          
-            });
-    }
-
     public virtual void Selected() {
         isSelected = true;
+
+        if (!isOccupied) {
+            mat.SetColor("_OutlineColor", SelectedColor);
+        }
+
         mat.SetInt("_AnimateOutline", 0);
         mat.SetFloat("_OutlineThickness", 2.0f);
     }
@@ -44,6 +41,10 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
     }
 
     public virtual void Hovered() {
+        if (!isOccupied) {
+            mat.SetColor("_OutlineColor", SelectedColor);
+        }
+
         if (isSelected) {
             mat.SetFloat("_OutlineThickness", 4.0f);
         }
@@ -83,11 +84,45 @@ public class Furniture : MonoBehaviour, ISelectable, IPointerEnterHandler, IPoin
         Unhovered();
     }
 
-    protected virtual void Interacted(NPC npc = null) {
-        
+    public void SetUnoccupied() {
+        Unoccupied();      
     }
 
-    public void SetUnoccupied() {
-        isOccupied = false;
+    protected virtual void Occupied() {
+        isOccupied = true;
+        mat.SetColor("_OutlineColor", OccupiedColor);
+        mat.SetFloat("_OutlineThickness", 2.0f);
     }
+
+    protected virtual void Unoccupied() {
+        isOccupied = false;
+        mat.SetFloat("_OutlineThickness", 0.0f);
+    }
+
+    public bool CanBeUsed() {
+        return !isOccupied && !isBroken;
+    }
+
+    public virtual void OccupiedBy(NPC npc) {
+        
+        Occupied();
+        user = npc;
+        user.Moving += UserMoved;
+    }
+
+    protected virtual void UserMoved() {
+        user.Moving -= UserMoved;
+        user = null;
+        Unoccupied();
+    }
+
+    public virtual void SetBroken() {
+        isBroken = true;
+    }
+
+    public virtual void SetFixed() {
+        isBroken = false;
+    }
+
+
 }

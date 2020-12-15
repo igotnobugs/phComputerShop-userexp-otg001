@@ -4,17 +4,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-/* Rushed
- * WIP, CLEAN UP
- * 
- * 3 Positions 
- * 
- * Dawn Position 
- * Set up Phase Position
- * Night time Position
- */
-
-
 public class OutsideLight : MonoBehaviour 
 {
     public Color dawnColor;

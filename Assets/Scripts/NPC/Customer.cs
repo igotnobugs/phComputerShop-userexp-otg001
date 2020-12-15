@@ -1,106 +1,173 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-/* Find a counter, line up, pay money, go to available computer
- * After certain time, leave
- */
 
 public class Customer : NPC 
 {
     public Transform door;
 
-    public int amountToPay; //How much to pay
-    public float timeAtCounter; //How long it talks at the counter
-
-    public int timeToUse; //How long to use the computer
+    public int budget;
+    public float overPayChance;
+    public float timeAtCounter; 
+    public int timeToUse; 
 
     protected Counter counter;
-    protected Computer computerToUse;
-    public List<Customer> costumerList;
+    protected Computer computerToUse = null;
 
-    private SceneAudioManager sceneAudioManager;
     private PersonalAudio personalAudio;
 
-    private void Start() {
-        sceneAudioManager = FindObjectOfType<SceneAudioManager>();
+    public Action TalkAtCounterAction;
+    public int numberInLine;
+
+    public bool isLining;
+
+    protected override void Awake() {
+        base.Awake();
         personalAudio = GetComponent<PersonalAudio>();
+        TalkAtCounterAction = () => StartCoroutine(StartTalking());
+    }
 
-        //Find a counter
-        counter = FindObjectOfType<Counter>();
+    protected override void Start() {
+        base.Start();
+        CheckComputerAvailablity();
+    }
 
-
-        // Go to counter
-        if (counter != null) {
-            counter.InteractAsCustomer(this as NPC, () => {
-                StartCoroutine(StartTalking());
-            });
+    public void CheckComputerAvailablity() {
+        Computer[] computers = FindObjectsOfType<Computer>();
+        for (int i = 0; i < computers.Length; i++) {
+            if (computers[i].CanBeUsed()) {
+                LineUpAtCounter();
+                return;
+            }
         }
-        else {
-            Debug.Log("Shop has no counter?");
+        
+        LeaveTheStore(); //None available
+    }
+
+    private void LineUpAtCounter() {
+        counter = FindObjectOfType<Counter>();
+        if (counter == null) LeaveTheStore(); // No Counter
+
+        if (counter.amountCustomerLining < 3) {      
+            numberInLine = counter.amountCustomerLining;
+            if (numberInLine > 0) {
+                counter.CustomerDonePaying += MoveUpTheLine;
+            }
+            isLining = true;
+            counter.LineUp(this);
+            return;
+        }
+
+        // Line is too long
+        LeaveTheStore();
+    }
+
+    private void MoveUpTheLine() {
+        numberInLine--;
+        int line = numberInLine;
+        if (line < 0) line = 0;
+
+        Vector3 interactDestination = GridCursor.WorldToGrid(counter.line[line].position);
+        if (line <= 0) {
+            MoveToGrid(interactDestination, () => {
+                TalkAtCounterAction();
+            });
+        } else {
+            MoveToGrid(interactDestination);
         }
     }
 
     private IEnumerator StartTalking() {
-        //Do stuff maybe some effects?
+        counter.CustomerDonePaying -= MoveUpTheLine;
 
         yield return new WaitUntil(() => counter.isOccupied);
 
-        //Less social increases time at Counter
-        float timeModified = 100.0f / counter.mannedByWho.attributes.social;
+        (counter.user as Staff).isBusy = true;
+        Computer[] computers = FindObjectsOfType<Computer>();
+        while (computerToUse == null) { 
+            for (int i = 0; i < computers.Length; i++) {
+                if (computers[i].CanBeUsed()) {
+                    computerToUse = computers[i];
+                    break;
+                }
+            }
+            yield return null;
+        }
+        yield return new WaitUntil(() => computerToUse != null);
+
+        GameManager.emo.PopEmotion("question", transform, new Vector2(0, 2));
+
+        float timeModified = 100.0f / counter.efficiency;
         timeAtCounter *= timeModified;
-        Debug.Log(timeAtCounter);
+
         yield return new WaitForSeconds(timeAtCounter);
 
-        // PAY
-        sceneAudioManager.Play("CashRegister");
-        GameManager.store.AddMoney(amountToPay);
+        if (budget < GameManager.store.price) {
+            if (UnityEngine.Random.Range(0, 1.0f) > overPayChance) {
+                GameManager.emo.PopEmotion("ouch", transform, new Vector2(0, 2));
+                LeaveTheStore();
+                yield break;
+            }
+        }
 
+        audioManager.Play("CashRegister");
+
+        (counter.user as Staff).isBusy = false;
+        (counter.user as Staff).attributes.DrainEnergyDefault();
+
+
+        computerToUse.isOccupied = true;
+        GameManager.emo.PopEmotion("happy", transform, new Vector2(0, 2));        
+        GameManager.store.AddEarnings(GameManager.store.price);
+
+        isLining = false;
+        counter.CustomerDone();
         GoToComputer();
         yield break;
     }
 
     private void GoToComputer() {
-        
-        Computer[] computers = FindObjectsOfType<Computer>();
-        for (int i = 0; i < computers.Length; i++) {
-            if (!computers[i].isOccupied) {
-                computerToUse = computers[i];
-                break;
-            }
-        }
-
-        // Should check this first before lining up but whatever
-        if (computerToUse == null) {
-            Debug.Log("No computers available.");
-            LeaveTheStore();
-        }
-        else {
-            computerToUse.Interact(this as NPC, () => {
-                Debug.Log("Customer interacted!");
-                StartCoroutine(InteractingComputer());
-            });
-        }
+        Interact(computerToUse, () => {
+            StartCoroutine(InteractingComputer());
+        });
     }
 
     private IEnumerator InteractingComputer() {
         //Do stuff
+     
         yield return new WaitForSeconds(timeToUse);
 
-        Debug.Log("Customer done!");
+        if (computerToUse.allowBrokenAfterUse) {
+            float chance = UnityEngine.Random.Range(0, 100.0f);
+            if (chance < clumsiness) {
+                computerToUse.SetBroken();
+            }
+        }
+        //
+
         LeaveTheStore();
         yield break;
     }
 
     public void LeaveTheStore() {
-        Debug.Log("Leaving the store!");
+        //Customer still lining up
+        if (isLining) {
+            counter.CustomerDonePaying -= MoveUpTheLine;
+            counter.amountCustomerLining--;
+        }
 
         StopAllCoroutines();
-        Vector3 doorGridPosition = GridCursor.WorldToGrid(door.position);
 
+        Vector3 doorGridPosition = GridCursor.WorldToGrid(door.position);
         MoveToGrid(doorGridPosition, () => {
-            costumerList.Remove(this);
-            Destroy(gameObject);
+            GameManager.customersInStore.Remove(this);
+            DestroyMe(); //Prevents unity from destroying the pathfinding script! wtf
         });
+    }
+
+    public void DestroyMe() {
+        Destroy(gameObject);
     }
 }

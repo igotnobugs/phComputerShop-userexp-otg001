@@ -20,8 +20,10 @@ public class PopUp : MonoBehaviour
     private Canvas canvas;
     private RectTransform rectTransform;
     private BaseUI targetUI;
-    private Action onCompleteFunc;
-    public SceneAudioManager audioManager;
+    private Action onIgnored;
+    private Action onFollow;
+    private SceneAudioManager audioManager;
+    private bool baseUIOpposite = false;
 
     private void Awake() {
         audioManager = FindObjectOfType<SceneAudioManager>();
@@ -32,7 +34,7 @@ public class PopUp : MonoBehaviour
     private void Start() {
         closeButton.onClick.AddListener(() => {
             PlayButtonAudio();
-            DestroyPopup();
+            DestroyIgnored();
         });
     }
 
@@ -43,36 +45,60 @@ public class PopUp : MonoBehaviour
     }
 
     public void MoveTo(Vector2 pivot, Vector2 anchorPosition) {
-        rectTransform.position = anchorPosition;
-        rectTransform.pivot = pivot;
+        rectTransform.anchorMin = pivot;
+        rectTransform.anchorMax = pivot;     
+        rectTransform.anchoredPosition = anchorPosition;
     }
 
-    public void SetListener(BaseUI ui, bool opposite = false) {
+    public void SetListener(BaseUI ui, bool opposite = false, Action onFollowUp = null) {
         targetUI = ui;
         if (!opposite) {
-            targetUI.OnActivating += DestroyPopup;
-        } else {
-            targetUI.OnDeactivating += DestroyPopup;
+            targetUI.OnActivating += DestroyFollowed;
         }
+        else {
+            targetUI.OnDeactivating += DestroyFollowed;
+        }
+        baseUIOpposite = opposite;
+        onFollow = onFollowUp;
     }
 
-    public void SetOnComplete(Action function) {
-        onCompleteFunc = function;
+    public void SetOnIgnored(Action function) {
+        onIgnored = function;
     }
 
-    public void DestroyPopup() {
-        onCompleteFunc?.Invoke();
-        targetUI.OnActivating -= DestroyPopup;
-        targetUI.OnDeactivating -= DestroyPopup;
+    public void DestroyIgnored() {
+        onIgnored?.Invoke();
+        if (!baseUIOpposite) {
+            targetUI.OnActivating -= DestroyFollowed;
+        }
+        else {
+            targetUI.OnDeactivating -= DestroyFollowed;
+        }
         Destroy(gameObject);
     }
 
+    public void DestroyFollowed() {
+        if (onFollow != null) {
+            onFollow?.Invoke();
+        } else {
+            onIgnored?.Invoke();
+        }
+        if (!baseUIOpposite) {
+            targetUI.OnActivating -= DestroyFollowed;
+        }
+        else {
+            targetUI.OnDeactivating -= DestroyFollowed;
+        }
+        Destroy(gameObject);
+    }
+
+
     public void PlayButtonAudio() {
-        if (audioManager != null)
-        {
+        if (audioManager != null) {
             audioManager.Play("ButtonClick");
         }
-        else
+        else {
             Debug.LogError("No Audio Manager found for PopUp");
+        }
     }
 }

@@ -1,13 +1,19 @@
-﻿
+﻿using System.Collections;
+using UnityEngine;
+
 public enum Day {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
 
 [System.Serializable]
 public class StoreData 
 {
-    public string storeName = "Unknown Store";
-    public string ownerName = "Unknown Owner";
+    [SerializeField] private string storeName = "Unknown Store";
+    [SerializeField] private string ownerName = "Unknown Owner";
 
-    public int earnings = 0;
+    public int price = 20;
+    public float wageMult = 1.0f;
+    
+    [SerializeField] public int Wages { private set; get; }
+    [SerializeField] public int Earnings { private set; get; }
     public int money = 0;
     public int moneyNeeded = 0;
 
@@ -75,8 +81,13 @@ public class StoreData
         return week.ToString() + " / " + month.ToString();
     }
 
+    public Staff[] staffs;
+
+    public int TotalWages { private set; get; }
+
     public void AdvanceDay() {
-        earnings = 0;
+        Earnings = 0;
+        GetTotalWages();
 
         if ((int)day >= 6) {
             day = 0;
@@ -94,20 +105,37 @@ public class StoreData
         }
     }
 
-    public void AddMoney(int amount) {
-        if (amount >= 0) {
-            money += amount;
-            earnings += amount;
-        }     
+    public void AddEarnings(int amount) {
+        if (amount > 0) {
+            Earnings += amount;
+        }
     }
 
-    public void AddMoneyNoEarnings(int amount) {
-        money += amount;
+    public void AddMoney(int amount) {
+        if (amount > 0) {
+            money += amount;
+        }
     }
 
     public void DeductMoney(int amount) {
-        if (amount < 0) {
+        if (amount < 0) {           
             money -= amount;
         }
+    }
+
+    public void ModifyMoney(int amount) {
+        money += amount;
+    }
+
+    public int GetProfit() {
+        return Earnings - TotalWages;
+    }
+
+    public int GetTotalWages() {
+        TotalWages = 0;
+        for (int i = 0; i < staffs.Length; i++) {
+            TotalWages += (int)(staffs[i].attributes.wage * wageMult);
+        }
+        return TotalWages;
     }
 }

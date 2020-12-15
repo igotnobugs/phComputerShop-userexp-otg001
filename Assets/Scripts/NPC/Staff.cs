@@ -9,102 +9,71 @@ using UnityEngine.EventSystems;
  */
 
 public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler 
-{
-    public StaffObject attributes;
-    [SerializeField] public Furniture mannedFurniture = null;
-
-    private MouseInput mouseInput;
-    
+{     
     private bool isSelected = false;
-    private bool allowSelection = false;
+    public bool AllowSelection { set; get; }
 
+    [Header("Staff Settings")]
+    public StaffObject attributes;
     public GameObject energyCounter;
+    public GameObject[] energyIcon;
+    public SelectionOutline outline;
+    public bool isBusy = false;
 
-    private SceneAudioManager audioManager;
+    protected MouseInput mouseInput;
 
     protected override void Awake() {
         base.Awake();
-        mouseInput = new MouseInput();       
-
+        mouseInput = new MouseInput();
+        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
+        mouseInput.Disable();
     }
 
     private void OnDisable() {
         mouseInput.Disable();
     }
 
-    private void Start() {
-        mouseInput.Mouse.MouseLeftClick.performed += _ => MouseLeftClick();
-        mouseInput.Disable();
-        audioManager = FindObjectOfType<SceneAudioManager>();
-    }
-
     private void MouseLeftClick() {
         if (ContextMenuManager.ContextMenuOpen) return;
         if (GridCursor.IsDisabled()) return;
+        if (isBusy) return;
 
         MoveToGrid(GridCursor.GridPositionOffset);
     }
 
-    public override void MoveToGrid(Vector3 destination, Action onCompleteFunc = null) {
-        if (mannedFurniture != null) {
-            mannedFurniture.SetUnoccupied();
-            mannedFurniture = null;
-        }
-        base.MoveToGrid(destination, onCompleteFunc);      
-    }
-
     public void Selected() {
-        if (!allowSelection) return;
+        if (!AllowSelection) return;
         isSelected = true;
-        mat.SetInt("_AnimateOutline", 0);
-        mat.SetFloat("_OutlineThickness", 2.0f);
+        outline.Selected();
+
         mouseInput.Enable();
         audioManager.Play("CharacterSelect");
     }
 
     public void Unselected() {
-        if (!allowSelection) return;
+        if (!AllowSelection) return;
         isSelected = false;
-        mat.SetInt("_AnimateOutline", 0);
-        mat.SetFloat("_OutlineThickness", 0.0f);
+        outline.Unselected();
         mouseInput.Disable();
     }
 
     public void Hovered() {
-        if (!allowSelection) return;
-        if (isSelected) {
-            mat.SetFloat("_OutlineThickness", 4.0f);           
+        if (!AllowSelection) return;
+        
+        if (!isSelected) {
+            outline.Hovered();
         }
-        else {
-            mat.SetInt("_AnimateOutline", 1);
-            mat.SetFloat("_OutlineThickness", 3.0f);           
-        }
+        CheckStatus();
         energyCounter.SetActive(true);
     }
 
     public void Unhovered() {
-        if (!allowSelection) return;
-        if (isSelected) {
-            mat.SetFloat("_OutlineThickness", 2.0f);
-        }
-        else {
-            mat.SetInt("_AnimateOutline", 0);
-            mat.SetFloat("_OutlineThickness", 0.0f);
+        if (!AllowSelection) return;
+
+        if (!isSelected) {
+            outline.Unhovered();
         }
         energyCounter.SetActive(false);
-    }
-
-    public void EnableSelection() {
-        allowSelection = true;
-    }
-
-    public void DisableSelection() {
-        allowSelection = false;
-    }
-
-    public void OnDestroy() {
-        mouseInput.Disable();
-        mouseInput.Mouse.MouseLeftClick.performed -= _ => MouseLeftClick();
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -117,5 +86,44 @@ public class Staff : NPC, ISelectable, IPointerEnterHandler, IPointerExitHandler
             SelectionManager.HoveredObject = null;
         }
         Unhovered();
+    }
+
+    public void ReplenishEnergy() {
+        energyIcon[0].gameObject.SetActive(true);
+        energyIcon[1].gameObject.SetActive(true);
+        energyIcon[2].gameObject.SetActive(true);
+        attributes.energy = 100;
+        isBusy = false;
+    }
+
+    public void OnDestroy() {
+        mouseInput.Disable();
+        mouseInput.Mouse.MouseLeftClick.performed -= _ => MouseLeftClick();
+    }
+
+    private void CheckStatus() {
+        if (attributes.energy < 70) {
+            energyIcon[2].gameObject.SetActive(false);
+        } else if (attributes.energy < 40) {
+            energyIcon[1].gameObject.SetActive(false);
+        } else if (attributes.energy < 10) {
+            energyIcon[0].gameObject.SetActive(false);
+        }
+    }
+
+    public void StaffFix(Furniture brokenFurniture) {
+        StartCoroutine(Fixing(brokenFurniture));
+        isBusy = true;
+    }
+
+    public IEnumerator Fixing(Furniture furniture) {
+
+        yield return new WaitForSeconds(2.0f);
+        furniture.SetFixed();
+
+        attributes.DrainEnergyDefault();
+
+        isBusy = false;
+        yield break;
     }
 }

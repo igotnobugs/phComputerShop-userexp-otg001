@@ -11,13 +11,20 @@ public class MainUIManager : Singleton<MainUIManager>
     public BaseUI staffPanel;
     public BaseUI clipboard;
 
+    [Header("As Tabs")]
+    public ManagementTab managementTab;
+
+
     public TransistionUI[] transistionInterfaces;
 
     [Header("Top Right Panel")]
+    [SerializeField] private TextMeshProUGUI currentProfit = null;
     [SerializeField] private TextMeshProUGUI availableMoney = null;
     [SerializeField] private TextMeshProUGUI moneyGoal = null;
     [SerializeField] private TextMeshProUGUI day = null;
     [SerializeField] private TextMeshProUGUI weekMonth = null;
+
+    [SerializeField] public EndDayUI endDayPanel = null;
 
     private Action onCompleteFunction;
     private bool isUIShown;
@@ -35,6 +42,16 @@ public class MainUIManager : Singleton<MainUIManager>
     }
 
     public void Update() {
+
+        int profit = GameManager.store.GetProfit();
+        if (profit < 0) {
+            currentProfit.color = Color.red;
+            currentProfit.text = profit.ToString();
+        } else {
+            currentProfit.color = Color.blue;
+            currentProfit.text = "+" + profit.ToString();
+        }
+        
         availableMoney.text = GameManager.store.money.ToString();
         moneyGoal.text = GameManager.store.moneyNeeded.ToString();
         day.text = GameManager.store.GetCurrentDayShortString();

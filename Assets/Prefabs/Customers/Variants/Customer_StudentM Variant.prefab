@@ -57,7 +57,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 84423624746715319, guid: 80cd3eaad28e2be46b06c8806c7475cd, type: 3}
       propertyPath: m_Name
-      value: Customer_StudentM
+      value: Customer_StudentM Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299368264849003672, guid: 80cd3eaad28e2be46b06c8806c7475cd, type: 3}
+      propertyPath: budget
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299368264849003672, guid: 80cd3eaad28e2be46b06c8806c7475cd, type: 3}
+      propertyPath: overPayChance
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299368264849003672, guid: 80cd3eaad28e2be46b06c8806c7475cd, type: 3}
+      propertyPath: clumsiness
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8144640023358257748, guid: 80cd3eaad28e2be46b06c8806c7475cd, type: 3}
       propertyPath: m_Controller

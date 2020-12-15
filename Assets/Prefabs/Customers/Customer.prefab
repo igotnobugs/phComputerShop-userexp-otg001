@@ -262,7 +262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seeker: {fileID: 84423624746715318}
-  GridOwner: {fileID: 0}
 --- !u!114 &-8526731268043958189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +277,7 @@ MonoBehaviour:
   moveSpeed: 5
   closeEnough: 0.001
   animator: {fileID: 8144640023358257748}
-  personalAudio: {fileID: 0}
+  personalAudio: {fileID: -3351607742934183213}
 --- !u!114 &2299368264849003672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,11 +290,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31c0cd252f849d44d860d166fb858c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clumsiness: 10
   door: {fileID: 0}
-  amountToPay: 20
+  budget: 30
+  overPayChance: 80
   timeAtCounter: 2
-  timeToUse: 5
-  costumerList: []
+  timeToUse: 10
+  numberInLine: 0
+  isLining: 0
 --- !u!114 &-3351607742934183213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +313,7 @@ MonoBehaviour:
   sounds:
   - name: Walking
     clip: {fileID: 8300000, guid: cb520a3170fc7f84488516ae2c15e6d5, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     loop: 1
     playOnAwake: 0

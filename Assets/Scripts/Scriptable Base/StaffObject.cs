@@ -14,4 +14,20 @@ public class StaffObject : ScriptableObject
     public int energy;
     public int social;
     public int technical;
+
+    public int wage;
+    public int energyDrain = 10;
+
+    public void DrainEnergyDefault() {
+        float wageMult = GameManager.store.wageMult;
+        int energyToDrain = (int)(energyDrain * (1 / wageMult));
+        DrainEnergy(energyToDrain);
+    }
+
+    public void DrainEnergy(int value) {
+        energy -= value;
+        if (energy < 0) {
+            energy = 0;
+        }
+    }
 }

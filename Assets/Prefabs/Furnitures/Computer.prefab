@@ -164,7 +164,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4360560742376324984}
+  - component: {fileID: 8938035474239504291}
   - component: {fileID: -4769074584140734417}
+  - component: {fileID: 3082162287054592091}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Furniture
@@ -188,6 +190,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8938035474239504291
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360560742376324985}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!114 &-4769074584140734417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +230,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactTransform: {fileID: 8073464994081503460}
   isOccupied: 0
+  user: {fileID: 0}
+  isBroken: 0
+  SelectedColor: {r: 0.19607843, g: 0.90588236, b: 0.1764706, a: 1}
+  OccupiedColor: {r: 0, g: 0.08627451, b: 1, a: 1}
+  computerLight: {fileID: 2412790053881052856}
+  onColor: {r: 0.25943398, g: 0.46635687, b: 1, a: 0.5019608}
+  idleColor: {r: 0.41441202, g: 0.5754717, b: 0.40445888, a: 0.5019608}
+  offColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0.5019608}
+  brokenColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &3082162287054592091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360560742376324985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f266c336c306d4181e4189958678da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Broken
+    clip: {fileID: 8300000, guid: c18d46f83ccce38409e21e7e8ef12a30, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Fixed
+    clip: {fileID: 8300000, guid: 1e760966fef909647acc402327fdc592, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
 --- !u!1 &6439054288328096289
 GameObject:
   m_ObjectHideFlags: 0

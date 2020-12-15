@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 public class Pathfinding2D : MonoBehaviour
 {
-
     public Transform seeker;
-    Grid2D grid;
-    Node2D seekerNode, targetNode;
-    public GameObject GridOwner;
-
+    private Grid2D grid;
+    private Node2D seekerNode, targetNode;
     public List<Node2D> myPath;
 
-    void Start()
+    private void Start()
     {
-        //Instantiate grid
-        if (GridOwner == null) {
-            GridOwner = GameObject.FindGameObjectWithTag("GridPathfinding");
-        }
-        grid = GridOwner.GetComponent<Grid2D>();     
+        FindGrid();
     }
 
+    private void FindGrid() {
+        if (grid != null) return;
+        GameObject GridOwner = GameObject.FindGameObjectWithTag("GridPathfinding");
+        grid = GridOwner.GetComponent<Grid2D>();
+    }
 
     public bool FindPath(Vector3 startPos, Vector3 targetPos)
     {
+        FindGrid();
+
         //get player and target position in grid coords
         seekerNode = grid.NodeFromWorldPoint(startPos);
         targetNode = grid.NodeFromWorldPoint(targetPos);
@@ -82,25 +82,24 @@ public class Pathfinding2D : MonoBehaviour
     }
 
     //reverses calculated path so first node is closest to seeker
-    void RetracePath(Node2D startNode, Node2D endNode)
+    private void RetracePath(Node2D startNode, Node2D endNode)
     {
-        List<Node2D> path = new List<Node2D>();
+        List<Node2D> newPath = new List<Node2D>();
         Node2D currentNode = endNode;
 
         while (currentNode != startNode)
         {
-            path.Add(currentNode);
+            newPath.Add(currentNode);
             currentNode = currentNode.parent;
         }
-        path.Reverse();
+        newPath.Reverse();
 
-        //grid.path = path;
-        myPath = path;
+        myPath = newPath;
     }
 
 
     //gets distance between 2 nodes for calculating cost
-    int GetDistance(Node2D nodeA, Node2D nodeB)
+    private int GetDistance(Node2D nodeA, Node2D nodeB)
     {
         int dstX = Mathf.Abs(nodeA.GridX - nodeB.GridX);
         int dstY = Mathf.Abs(nodeA.GridY - nodeB.GridY);
