@@ -201,8 +201,9 @@ GameObject:
   - component: {fileID: -8526731268043958189}
   - component: {fileID: 7014435925993290920}
   - component: {fileID: 1835499308388410858}
+  - component: {fileID: -5960532184245896351}
   m_Layer: 0
-  m_Name: AStarChracter
+  m_Name: Staff
   m_TagString: Staff
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -265,7 +266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seeker: {fileID: 84423624746715318}
-  GridOwner: {fileID: 0}
 --- !u!114 &-8526731268043958189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,8 +295,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attributes: {fileID: 11400000, guid: ee7f25b3334cd854697f8d6f920b8c94, type: 2}
-  mannedFurniture: {fileID: 0}
   energyCounter: {fileID: 65871965721790370}
+  energyIcon:
+  - {fileID: 2170270722786148560}
+  - {fileID: 6968733607822555773}
+  - {fileID: 498754278434725597}
+  outline: {fileID: -5960532184245896351}
+  isBusy: 0
 --- !u!114 &1835499308388410858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +329,18 @@ MonoBehaviour:
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
+--- !u!114 &-5960532184245896351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84423624746715319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f422dd8068849894799d84bb87175fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &498754278434725597
 GameObject:
   m_ObjectHideFlags: 0

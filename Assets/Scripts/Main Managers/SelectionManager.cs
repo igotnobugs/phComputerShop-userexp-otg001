@@ -68,6 +68,6 @@ public class SelectionManager : Singleton<SelectionManager>
             SelectedObject = go;
             selectableObject.Selected();
         }
-        Debug.Log(SelectedObject);
+        //Debug.Log(SelectedObject);
     }
 }

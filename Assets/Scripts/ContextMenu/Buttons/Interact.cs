@@ -15,6 +15,7 @@ public class Interact : MonoBehaviour, IContextButton
 
     public void Enable() {
         if (SelectionManager.SelectedObject == null) return;
+        if (SelectionManager.HoveredObject == null) return;
 
         if (SelectionManager.SelectedObject.TryGetComponent(out Staff staff)) { 
             if (SelectionManager.HoveredObject.tag == "Furniture") {
@@ -29,8 +30,14 @@ public class Interact : MonoBehaviour, IContextButton
 
     public void OnClick() {       
 
-        if (SelectionManager.SelectedObject.TryGetComponent(out NPC npc)) {
-            contextObject.Interact(npc);
+        if (SelectionManager.SelectedObject.TryGetComponent(out Staff staffNpc)) {
+            if (contextObject.isBroken) {
+                staffNpc.Interact(contextObject, () => {
+                    staffNpc.StaffFix(contextObject);
+                });
+            } else {
+                staffNpc.Interact(contextObject);
+            }
         }
         contextManager.DisableContextMenu();
     }

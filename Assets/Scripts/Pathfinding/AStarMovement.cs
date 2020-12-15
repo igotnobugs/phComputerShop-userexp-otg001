@@ -62,21 +62,19 @@ public class AStarMovement : MonoBehaviour
                 pathfinding.myPath.RemoveAt(0); // Remove node
             }
         } else {
-            //Debug.Log("Path done!");
             pathfinding.myPath = null;
             onCompletePath?.Invoke();
+            onCompletePath = null;
         }
     }
 
     public bool AttemptFindPath(Vector3 destination, Action onCompleteFunc = null) {  
         if (pathfinding.FindPath(transform.position, destination)) {
-            //Debug.Log("Path found at " + destination);
             if (onCompleteFunc != null) {
                 onCompletePath = onCompleteFunc;
             }
             return true;
         }
-        //Debug.Log("Path not found at " + destination);
         return false;
     }
 }

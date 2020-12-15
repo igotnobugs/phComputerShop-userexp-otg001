@@ -10,15 +10,17 @@ public class Initialize : ShopPhaseBase
     
         gameMgr.sun.EarlyMorning(3.0f);
 
-        gameMgr.stateMachine.SetBool("tutorialEnabled", gameMgr.showTutorial);
+        gameMgr.sceneAudio.Play("DayAmbience");
+
+        shopStateMachine.SetBool("tutorialEnabled", gameMgr.showTutorial);
 
         gameMgr.transistion.Hide(() => {
             if (gameMgr.showTutorial) {
-                gameMgr.stateMachine.SetTrigger("initialized");
+                shopStateMachine.SetTrigger("initialized");
             }
             else {
                 gameMgr.mainUIManager.StartSequence(() => {
-                    gameMgr.stateMachine.SetTrigger("initialized");
+                    shopStateMachine.SetTrigger("initialized");
                 });
             }
         }).setDelay(0.5f);

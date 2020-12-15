@@ -25,25 +25,34 @@ public class EndDayUI : MonoBehaviour
 
     public void Init(Action buttonOnClick) {
         confirm.onClick.AddListener(() => buttonOnClick?.Invoke());
-
         confirm.gameObject.SetActive(false);
     }
 
     // Enumerate
     public void Calculate() {
+        earnings.gameObject.SetActive(false);
+        wages.gameObject.SetActive(false);
+        profits.gameObject.SetActive(false);
+        total.gameObject.SetActive(false);
         StartCoroutine(StartCalculating());
     }
 
     private IEnumerator StartCalculating() {
-        earnings.text = GameManager.store.earnings.ToString();
+        //Earnings
+        earnings.gameObject.SetActive(true);
+        earnings.text = GameManager.store.Earnings.ToString();
         yield return new WaitForSeconds(sequenceSpeed);
 
-        //wage test
-        int wage = -200;
+        //Wages
+        wages.gameObject.SetActive(true);
+        int wage = GameManager.store.GetTotalWages();
+        GameManager.store.DeductMoney(Mathf.Abs(wage));
         wages.text = wage.ToString();
         yield return new WaitForSeconds(sequenceSpeed);
 
-        int profit = GameManager.store.earnings + wage;
+        //Profit
+        profits.gameObject.SetActive(true);
+        int profit = GameManager.store.GetProfit();
         profits.text = "";
         if (profit > 0) {
             profits.color = positiveNetProfit;
@@ -58,8 +67,9 @@ public class EndDayUI : MonoBehaviour
         profits.text += profit.ToString();
         yield return new WaitForSeconds(sequenceSpeed);
 
-    
-        GameManager.store.AddMoneyNoEarnings(profit);
+        //Total
+        total.gameObject.SetActive(true);
+        GameManager.store.ModifyMoney(profit);
         total.text = GameManager.store.money.ToString();
 
         confirm.gameObject.SetActive(true);
